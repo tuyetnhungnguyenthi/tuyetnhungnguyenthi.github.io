@@ -137,12 +137,12 @@ function buildSidebar(products) {
     tree.innerHTML = Object.entries(cats).map(([cat, items]) => `
         <div class="cat-group open" data-cat="${cat}">
             <div class="cat-header" onclick="toggleCat(this)">
-                <span>${cat}</span>
+                <span data-translatable>${cat}</span>
                 <span class="cat-arrow">▶</span>
             </div>
             <div class="cat-items">
                 ${items.map(p =>
-                    `<span class="cat-item" onclick="filterByCatAndProduct('${cat}',${p.no})">${p.name}</span>`
+                    `<span class="cat-item" onclick="filterByCatAndProduct('${cat}',${p.no})" data-translatable>${p.name}</span>`
                 ).join('')}
             </div>
         </div>`).join('');
@@ -152,9 +152,9 @@ function buildSidebar(products) {
 function buildFilterPills(products) {
     const pills = document.getElementById('filterPills');
     const cats  = [...new Set(products.map(p => p.category || 'Khác'))];
-    pills.innerHTML = `<button class="pill-btn active" data-cat="all" onclick="setCatFilter('all',this)">Tất cả</button>`
+    pills.innerHTML = `<button class="pill-btn active" data-cat="all" onclick="setCatFilter('all',this)" data-vi="Tất cả" data-en="All">Tất cả</button>`
         + cats.map(c =>
-            `<button class="pill-btn" data-cat="${c}" onclick="setCatFilter('${c}',this)">${c}</button>`
+            `<button class="pill-btn" data-cat="${c}" onclick="setCatFilter('${c}',this)" data-translatable>${c}</button>`
         ).join('');
 }
 
