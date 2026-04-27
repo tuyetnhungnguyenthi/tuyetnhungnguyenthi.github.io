@@ -204,7 +204,7 @@ async function fetchProducts() {
             category:  item.category ?? 'Chưa phân loại',
             shopeeLink: item.shopeeLink ?? item.affiliateLink ?? '',
             tiktokLink: item.tiktokLink ?? '',
-            images:    item.images   ?? (item.imageUrl ? [item.imageUrl] : []),
+            images:    item.images   ?? (item.imageUrl ? [driveThumb(item.imageUrl)] : []),
             reviews:   item.reviews  ?? (item.description ? [{ date: '', content: item.description }] : []),
             videoLinks: item.videoLinks ?? []
         }));
