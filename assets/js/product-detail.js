@@ -101,6 +101,7 @@ function showToast(msg, type = 'success') {
 // ================================================================
 function renderDetail(p) {
     const main = document.getElementById('detailMain');
+    if (!main) return; // Not on the product detail page
     document.title = `${p.name} | Góc Nhỏ Của Nhún`;
 
     injectLightbox();
@@ -332,6 +333,7 @@ function switchImg(src, thumb) {
 async function loadDetail() {
     const no = getParam('no');
     const main = document.getElementById('detailMain');
+    if (!main) return; // Not on the product detail page (e.g. yeu-cau-review.html)
 
     // Try sessionStorage first (set by list page on card click)
     const cached = sessionStorage.getItem('nhun_product');
