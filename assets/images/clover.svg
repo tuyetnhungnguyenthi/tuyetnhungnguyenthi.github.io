@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+  <!-- Four leaves -->
+  <ellipse cx="12" cy="7.5" rx="4" ry="5" fill="#3da85a" opacity="0.88" transform="rotate(0 12 12)"/>
+  <ellipse cx="16.5" cy="12" rx="4" ry="5" fill="#3da85a" opacity="0.88" transform="rotate(90 12 12)"/>
+  <ellipse cx="12" cy="16.5" rx="4" ry="5" fill="#3da85a" opacity="0.88" transform="rotate(180 12 12)"/>
+  <ellipse cx="7.5" cy="12" rx="4" ry="5" fill="#3da85a" opacity="0.88" transform="rotate(270 12 12)"/>
+  <!-- Center -->
+  <circle cx="12" cy="12" r="2.2" fill="#2e8f47"/>
+  <!-- Stem -->
+  <path d="M12 14.5 Q13.5 18 15 21.5" stroke="#3da85a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+</svg>

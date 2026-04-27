@@ -107,8 +107,8 @@ function renderGrid(products) {
     grid.innerHTML = products.map(p => {
         const imgHtml = p.images && p.images.length
             ? `<img class="card-img" src="${p.images[0]}" alt="${p.name}" loading="lazy"
-                    onerror="this.parentElement.innerHTML='<div class=\\'card-img-placeholder\\'>🍀</div>'">`
-            : `<div class="card-img-placeholder">🍀</div>`;
+                    onerror="this.parentElement.innerHTML='<div class=\\'card-img-placeholder\\'><img src=\\'assets/images/clover.svg\\' style=\\'width:44px;height:44px;opacity:0.45\\' alt=\\'\\'/></div>'">`
+            : `<div class="card-img-placeholder"><img src="assets/images/clover.svg" style="width:44px;height:44px;opacity:0.45" alt=""></div>`;
         return `
         <div class="product-card" onclick="goDetail(${p.no})" tabindex="0"
              onkeypress="if(event.key==='Enter')goDetail(${p.no})">

@@ -246,6 +246,22 @@ body {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+/* Clover SVG decorators flanking the shop title */
+.shop-header h1::before,
+.shop-header h1::after {
+    content: '';
+    display: inline-block;
+    width: 1.6rem;
+    height: 1.6rem;
+    background: url('../images/clover.svg') center / contain no-repeat;
+    flex-shrink: 0;
+    -webkit-text-fill-color: initial; /* reset gradient clip for pseudo-element */
 }
 
 .shop-header p {
