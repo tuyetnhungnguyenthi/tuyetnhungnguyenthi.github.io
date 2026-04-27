@@ -1,40 +1,58 @@
 // ================================================================
 // GOOGLE APPS SCRIPT — Dán vào Apps Script Editor và Deploy lại
 // ================================================================
-// CẤU TRÚC SHEET (từ hàng 2 trở đi):
+// CẤU TRÚC SHEET1 (từ hàng 2 trở đi):
 // A: STT | B: Tên sản phẩm | C: Link Shopee | D: Link TikTok
-// E: Hình ảnh sản phẩm | F: Nội dung review | G: Link video TikTok | H: Danh mục
+// E: Hình ảnh sản phẩm | F: Nội dung review | G: Link video TikTok
+// H: Danh mục | I: Các sản phẩm liên quan
+//
+// SHEET "Request from User":
+// A: Ngày và giờ | B: Tên sản phẩm | C: Nickname | D: Nội dung yêu cầu | E: Status
 // ================================================================
 
-// ---- Hàm chính: trả dữ liệu JSON cho website ----
+const SPREADSHEET_ID = '1kZrMreYg5bqZBy9-_8CXu7DjH5u72cOpgtPPxvvaoIA';
+
+// ---- Hàm chính: xử lý GET requests ----
 function doGet(e) {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  const data  = sheet.getDataRange().getValues();
+  const action = (e.parameter && e.parameter.action) || '';
 
-  // Hàng 0 = trống, Hàng 1 = header, Hàng 2+ = data
-  const HEADER_ROW = 1;
-  const result = [];
-
-  for (let i = HEADER_ROW + 1; i < data.length; i++) {
-    const row = data[i];
-    if (!row[1] || row[1].toString().trim() === '') continue;
-
-    result.push({
-      no:         parseInt(row[0]) || (i - HEADER_ROW),
-      name:       row[1].toString().trim(),
-      shopeeLink: row[2] ? row[2].toString().trim() : '',
-      tiktokLink: row[3] ? row[3].toString().trim() : '',
-      images:     parseImages(row[4] ? row[4].toString() : ''),
-      reviews:    parseReviews(row[5] ? row[5].toString() : ''),
-      videoLinks: parseVideoLinks(row[6] ? row[6].toString() : ''),
-      category:   row[7] ? row[7].toString().trim() : 'Khác'
-    });
+  // Form submission (feedback + review request)
+  if (action === 'submit') {
+    return handleFormSubmit(e.parameter);
   }
 
-  const output = ContentService.createTextOutput(JSON.stringify(result));
-  output.setMimeType(ContentService.MimeType.JSON);
-  return output;
+  // Default: trả về OK (data đọc qua gviz API, không cần endpoint này)
+  return ContentService
+    .createTextOutput(JSON.stringify({ ok: true, message: 'Use gviz API for product data' }))
+    .setMimeType(ContentService.MimeType.JSON);
 }
+
+// ---- Ghi form submission vào sheet "Request from User" ----
+function handleFormSubmit(params) {
+  try {
+    const ss    = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sheet = ss.getSheetByName('Request from User');
+
+    if (!sheet) throw new Error('Sheet "Request from User" not found');
+
+    sheet.appendRow([
+      new Date(),                          // A: Ngày và giờ
+      params.product  || '(Chung)',        // B: Tên sản phẩm
+      params.nickname || '(Ẩn danh)',      // C: Nickname
+      params.request  || '',               // D: Nội dung yêu cầu
+      ''                                   // E: Status - Nhún điền sau
+    ]);
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: true }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: false, error: err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
 
 // ---- Trigger hàng ngày: ghi log và kiểm tra dữ liệu ----
 // Để cài trigger: Chạy hàm setupDailyTrigger() 1 lần duy nhất

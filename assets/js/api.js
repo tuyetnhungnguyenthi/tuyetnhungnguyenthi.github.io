@@ -53,6 +53,38 @@ function parseVideoLinks(raw) {
     return result;
 }
 
+function parseRelated(raw) {
+    // Parses Column I "C\u00e1c s\u1ea3n ph\u1ea9m li\u00ean quan"
+    // Format (per date block):
+    //   dd/mm/yyyy:
+    //   - Ten san pham [no]
+    // Returns { 'dd/mm/yyyy': [{name, no}] }
+    if (!raw) return {};
+    const result = {};
+    let currentDate = null;
+    raw.split('\n').forEach(line => {
+        line = line.trim();
+        if (!line) return;
+        const dateMatch = line.match(/^(\d{1,2}\/\d{1,2}\/\d{4})\s*:?\s*(.*)?$/);
+        if (dateMatch) {
+            currentDate = dateMatch[1];
+            if (!result[currentDate]) result[currentDate] = [];
+            const rest = (dateMatch[2] || '').trim();
+            if (rest) {
+                const pm = rest.match(/[-*\u2022]\s+(.+?)\s+\[(\d+)\]/);
+                if (pm) result[currentDate].push({ name: pm[1].trim(), no: parseInt(pm[2]) });
+            }
+            return;
+        }
+        const pm = line.match(/^[-*\u2022]\s+(.+?)\s+\[(\d+)\]/);
+        if (pm && currentDate) {
+            if (!result[currentDate]) result[currentDate] = [];
+            result[currentDate].push({ name: pm[1].trim(), no: parseInt(pm[2]) });
+        }
+    });
+    return result;
+}
+
 // ---- Fetch from Google Sheets gviz JSON API ----
 async function fetchFromSheet() {
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
@@ -87,7 +119,8 @@ async function fetchFromSheet() {
             images: parseImages(get(row, 'Hình ảnh sản phẩm')),
             reviews: parseReviews(get(row, 'Nội dung review')),
             videoLinks: parseVideoLinks(get(row, 'Link video tiktok liên quan')),
-            category: get(row, 'Danh mục') || 'Khác'
+            category: get(row, 'Danh mục') || 'Khác',
+            relatedProducts: parseRelated(get(row, 'Các sản phẩm liên quan'))
         }))
         .filter(p => p.name && p.name.trim()); // bỏ hàng trống
 }
