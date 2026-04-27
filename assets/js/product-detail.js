@@ -4,7 +4,7 @@
 // ================================================================
 
 // ---- Apps Script URL (điền sau khi deploy) ----
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbyDh9UY4hO56gpCExj2SEyYRzSzLTluHJkvACg2ITOGbZ5UDecYyvhHZuwaPKVCuhfdEw/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyDh9UY4hO56gpCExj2SEyYRzSzLTluHJkvACg2ITOGbZ5UDecYyvhHZuwaPKVCuhfdEw/exec';
 
 function getParam(name) {
     return new URLSearchParams(window.location.search).get(name);
