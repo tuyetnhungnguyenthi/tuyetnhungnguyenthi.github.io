@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Góc Nhỏ Của Nhún | Review sản phẩm</title>
+    <meta name="description" content="Review chân thực, link affiliate chuẩn chỉnh từ Nhung Nguyễn.">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/goc-nho.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html">Về Mình</a>
+        <a href="goc-nho.html" class="active">Góc Nhỏ Của Nhún</a>
+        <a href="#" onclick="alert('Vui lòng liên hệ gmail nhung14042001@gmail.com'); return false;">My CV</a>
+    </nav>
+
+    <header class="shop-header">
+        <h1>🎀 Góc Nhỏ Của Nhún 🎀</h1>
+        <p>Review chân thực · Link chuẩn chỉnh</p>
+    </header>
+
+    <!-- Toolbar: Sort / Filter / Search -->
+    <div class="toolbar">
+        <div class="toolbar-inner">
+            <select class="sort-select" id="sortSelect">
+                <option value="newest">⬇ Mới nhất</option>
+                <option value="oldest">⬆ Cũ nhất</option>
+                <option value="az">A → Z</option>
+            </select>
+
+            <div class="filter-pills" id="filterPills">
+                <button class="pill-btn active" data-cat="all">Tất cả</button>
+                <!-- Categories added by JS -->
+            </div>
+
+            <div class="search-wrap">
+                <input type="text" id="searchInput" class="search-input" placeholder="🔍 Tìm sản phẩm...">
+            </div>
+        </div>
+    </div>
+
+    <!-- Content: Sidebar + Grid -->
+    <div class="content-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-title">📂 Danh mục</div>
+            <div id="categoryTree">
+                <p style="font-size:0.82rem;color:var(--text-light);padding:8px">Đang tải...</p>
+            </div>
+        </aside>
+
+        <main class="product-area">
+            <div class="product-grid" id="productGrid">
+                <p class="loading">✨ Đang tải sản phẩm từ Google Sheets...</p>
+            </div>
+            <p class="no-results hidden" id="noResults">😅 Không tìm thấy sản phẩm phù hợp</p>
+        </main>
+    </div>
+
+    <script src="assets/js/api.js"></script>
+</body>
+</html>

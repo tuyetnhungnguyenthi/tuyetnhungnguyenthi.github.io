@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhún's Corner | Về Mình</title>
+    <meta name="description" content="Trang cá nhân của Nhung — QA Automation Engineer yêu TikTok và mèo.">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        /* ===== ABOUT PAGE EXTRAS ===== */
+        .about-layout {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 32px;
+            align-items: start;
+        }
+
+        .avatar-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Photo placeholder — user can replace src with real photo */
+        .avatar-photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--border);
+            box-shadow: 0 4px 20px rgba(61, 168, 90, 0.15);
+            background: var(--green-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            overflow: hidden;
+        }
+
+        .avatar-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .avatar-placeholder {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green-100), var(--green-200));
+            border: 4px solid var(--border);
+            box-shadow: 0 4px 20px rgba(61, 168, 90, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            font-size: 0;
+        }
+
+        .avatar-placeholder::before {
+            content: '🌿';
+            font-size: 3rem;
+        }
+
+        .avatar-placeholder::after {
+            content: 'ảnh của Nhún';
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-family: 'Nunito', sans-serif;
+            font-weight: 600;
+        }
+
+        .avatar-name {
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .bio-col {}
+
+        .bio-intro {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .bio-intro .wave { animation: wave 1.4s infinite; display: inline-block; }
+
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(20deg); }
+            75% { transform: rotate(-10deg); }
+        }
+
+        .bio-text {
+            font-size: 0.94rem;
+            color: var(--text-muted);
+            line-height: 1.85;
+            margin-bottom: 10px;
+        }
+
+        .bio-text:last-child { margin-bottom: 0; }
+
+        .highlight {
+            background: var(--green-100);
+            color: var(--accent2);
+            border-radius: 5px;
+            padding: 1px 6px;
+            font-weight: 600;
+        }
+
+        .emoji-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .emoji-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--bg-card2);
+            border: 1px solid var(--border);
+            border-radius: 99px;
+            padding: 5px 12px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: border-color 0.2s;
+        }
+
+        .emoji-chip:hover {
+            border-color: var(--accent-soft);
+            color: var(--accent2);
+        }
+
+        /* ===== FUN SECTION ===== */
+        .fun-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+        }
+
+        .fun-card {
+            background: var(--bg-card2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .fun-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(61, 168, 90, 0.1);
+        }
+
+        .fun-card .icon {
+            font-size: 1.8rem;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .fun-card .label {
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text);
+            display: block;
+        }
+
+        .fun-card .desc {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        /* ===== TIKTOK BANNER ===== */
+        .tiktok-banner {
+            background: linear-gradient(135deg, var(--green-100), #f0faf2);
+            border: 1.5px solid var(--accent-soft);
+            border-radius: var(--radius);
+            padding: 22px 26px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .tiktok-banner .big-icon {
+            font-size: 3rem;
+            flex-shrink: 0;
+        }
+
+        .tiktok-banner h3 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .tiktok-banner p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 640px) {
+            .about-layout {
+                grid-template-columns: 1fr;
+            }
+            .avatar-col { flex-direction: row; gap: 16px; }
+            .avatar-placeholder { width: 90px; height: 90px; flex-shrink: 0; }
+            .avatar-placeholder::before { font-size: 2rem; }
+            .avatar-name { font-size: 0.75rem; }
+            .bio-intro { font-size: 0.95rem; }
+            .tiktok-banner { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="active">Về Mình</a>
+        <a href="goc-nho.html">Góc Nhỏ Của Nhún</a>
+        <a href="#" onclick="alert('Vui lòng liên hệ gmail nhung14042001@gmail.com'); return false;">My CV</a>
+    </nav>
+
+    <main class="container">
+
+        <!-- ===== PROFILE HEADER ===== -->
+        <header class="profile-header">
+            <h1>Xin chào! Mình là Nhún 🌿</h1>
+            <p class="subtitle">QA Automation Engineer &nbsp;·&nbsp; TikToker nghiệp dư &nbsp;·&nbsp; 🇻🇳 TP. Hồ Chí Minh</p>
+        </header>
+
+        <!-- ===== ABOUT ME ===== -->
+        <section class="content-section" id="about">
+            <h2>👋 Về Mình</h2>
+
+            <div class="about-layout">
+                <!-- Photo column -->
+                <div class="avatar-col">
+                    <!-- 
+                        ★ Để thêm ảnh thật: 
+                           1. Đặt ảnh vào thư mục assets/images/ 
+                           2. Thay div.avatar-placeholder bên dưới bằng:
+                              <img class="avatar-photo" src="assets/images/avatar.jpg" alt="Nhung">
+                    -->
+                    <div class="avatar-placeholder" title="Ảnh của Nhún sẽ ở đây ✨"></div>
+                    <span class="avatar-name">📸 Ảnh sẽ cập nhật sau nha!</span>
+                </div>
+
+                <!-- Bio column -->
+                <div class="bio-col">
+                    <p class="bio-intro">
+                        <span class="wave">👋</span> Heyyy! Mình là <strong>Nhung</strong> — hay còn được gọi là <strong>Nhún</strong> bởi hội bạn bè!
+                    </p>
+                    <p class="bio-text">
+                        Hiện tại mình đang làm <span class="highlight">QA Automation Test Engineer</span> cho một công ty tại TP. Hồ Chí Minh, chuyên test phần mềm cho khách hàng Nhật Bản 🇯🇵. Công việc của mình nghe có vẻ <em>cứng nhắc</em> lắm — suốt ngày ngồi viết script, debug test case, cấm chat, phải yên tĩnh để tập trung... 😶‍🌫️
+                    </p>
+                    <p class="bio-text">
+                        Nhưng mà! Năng lượng dư thừa thì phải có nơi để xả chứ đúng không? Nên mình đã quyết định quay <span class="highlight">TikTok</span> để share những khoảnh khắc đời thường, review đồ, chia sẻ bớt "sự sống" sau giờ làm cứng nhắc hehe 🎬✨
+                    </p>
+                    <p class="bio-text">
+                        Mình vẫn đang tập tành, chưa chuyên nghiệp gì hết nên hi vọng mọi người sẽ đón nhận Nhún nhé! 🥺💚
+                    </p>
+
+                    <div class="emoji-row">
+                        <span class="emoji-chip">🤖 Automation Testing</span>
+                        <span class="emoji-chip">🇯🇵 Tiếng Nhật N3</span>
+                        <span class="emoji-chip">🎬 TikTok nghiệp dư</span>
+                        <span class="emoji-chip">🛍️ Affiliate reviewer</span>
+                        <span class="emoji-chip">☕ Cà phê addict</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== TIKTOK BANNER ===== -->
+        <div class="tiktok-banner">
+            <span class="big-icon">🎀</span>
+            <div>
+                <h3>Nhún đang làm TikToker nghiệp dư nè!</h3>
+                <p>Từ một người cả ngày chỉ nhìn code → quyết định ra đời chia sẻ năng lượng 🌱 Ghé <strong>Góc Nhỏ Của Nhún</strong> để xem review sản phẩm nhé!</p>
+            </div>
+        </div>
+
+        <!-- ===== FUN FACTS ===== -->
+        <section class="content-section" id="fun">
+            <h2>✨ Một chút về Nhún</h2>
+            <div class="fun-grid">
+                <div class="fun-card">
+                    <span class="icon">🧪</span>
+                    <span class="label">Bug Hunter</span>
+                    <span class="desc">Cả ngày đi tìm bug của người khác 🕵️</span>
+                </div>
+                <div class="fun-card">
+                    <span class="icon">🤫</span>
+                    <span class="label">Silent Mode pro</span>
+                    <span class="desc">Cấm chat ở công ty = thành thần thánh nhắn tin nhanh</span>
+                </div>
+                <div class="fun-card">
+                    <span class="icon">🇯🇵</span>
+                    <span class="label">Weeaboo nhẹ</span>
+                    <span class="desc">Hay xài tiếng Nhật mỗi khi làm việc với khách</span>
+                </div>
+                <div class="fun-card">
+                    <span class="icon">🎬</span>
+                    <span class="label">TikToker tập sự</span>
+                    <span class="desc">Đang trong giai đoạn "học cách không xấu hổ" hehe</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Made with 💚 by Nhún · © 2025</p>
+    </footer>
+</body>
+
+</html>
