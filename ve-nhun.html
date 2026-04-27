@@ -8,27 +8,6 @@
     <meta name="description" content="Trang cá nhân của Nhún — Vô tri lạc quan nhưng được cái cứng đầu">
     <link rel="stylesheet" href="assets/css/style.css">
     <style>
-        /* Clover decorators for profile header h1 */
-        .profile-header h1 {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-        }
-        .profile-header h1 .h1-line1 {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .profile-header h1 .h1-line1::before,
-        .profile-header h1 .h1-line1::after {
-            content: '';
-            display: inline-block;
-            width: 1.3rem;
-            height: 1.3rem;
-            background: url('assets/images/clover.svg') center / contain no-repeat;
-            flex-shrink: 0;
-        }
         .about-layout {
             display: grid;
             grid-template-columns: 200px 1fr;
@@ -235,13 +214,8 @@
 
         <!-- HEADER -->
         <header class="profile-header">
-            <h1>
-                <span class="h1-line1"
-                      data-vi="Chào mừng đến với Nhuniverse"
-                      data-en="Welcome to Nhuniverse">Chào mừng đến với Nhuniverse</span>
-                <span data-vi="Mình là Nhún chan!"
-                      data-en="I'm Nhún chan!">Mình là Nhún chan!</span>
-            </h1>
+            <h1 data-vi="🌿 Chào mừng đến với Nhuniverse!"
+                data-en="🌿 Welcome to Nhuniverse!">🌿 Chào mừng đến với Nhuniverse!</h1>
             <p class="subtitle"
                 data-vi="QA Automation Engineer &nbsp;·&nbsp; Affiliate Marketing &nbsp;·&nbsp; 🇻🇳 TP. Hồ Chí Minh"
                 data-en="QA Automation Engineer &nbsp;·&nbsp; Affiliate Marketing &nbsp;·&nbsp; 🇻🇳 Ho Chi Minh City">
@@ -297,7 +271,7 @@
 
         <!-- BANNER -->
         <div class="tiktok-banner">
-            <img src="assets/images/clover.svg" class="big-icon" alt="" aria-hidden="true">
+            <span class="big-icon">🌿</span>
             <div>
                 <h3 data-vi="Fact new" data-en="New fact">Fact new</h3>
                 <p data-html-vi="Thật ra có thể xài những website/app có sẵn nhưng mình muốn dùng chính 🌱 <strong>cần câu cơm</strong> của mình để tạo ra sản phẩm mang đậm dấu răng hehe 😜 Lỡ thấy website lỗi thì cứ hú mình đi fix nha 😅"
