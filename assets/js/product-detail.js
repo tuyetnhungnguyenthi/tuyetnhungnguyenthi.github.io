@@ -4,7 +4,7 @@
 // ================================================================
 
 // ---- Apps Script URL (điền sau khi deploy) ----
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbyDh9UY4hO56gpCExj2SEyYRzSzLTluHJkvACg2ITOGbZ5UDecYyvhHZuwaPKVCuhfdEw/exec';
 
 function getParam(name) {
     return new URLSearchParams(window.location.search).get(name);
@@ -113,11 +113,11 @@ function renderDetail(p) {
         <div class="detail-gallery">
             <div class="gallery-main">
                 ${mainImgSrc
-                    ? `<img id="mainImg" src="${mainImgSrc}" alt="${p.name}"
+            ? `<img id="mainImg" src="${mainImgSrc}" alt="${p.name}"
                             onclick="openLightbox(this.src)"
                             title="Click để phóng to"
                             style="cursor:zoom-in">`
-                    : `<div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:4rem">🌿</div>`}
+            : `<div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:4rem">🌿</div>`}
             </div>
             ${imgs.length > 1 ? `
             <div class="gallery-thumbs">
@@ -142,24 +142,24 @@ function renderDetail(p) {
             <div class="reviews-title" data-vi="📝 Nhật ký review" data-en="📝 Review diary">📝 Nhật ký review</div>
             <div class="review-table">
                 ${reviews.map(r => {
-                    const vid = videoMap[r.date] || '';
-                    const vidHtml = vid
-                        ? `<a class="review-video" href="${vid}" target="_blank" rel="noopener"
+        const vid = videoMap[r.date] || '';
+        const vidHtml = vid
+            ? `<a class="review-video" href="${vid}" target="_blank" rel="noopener"
                               data-vi="🎬 Xem video" data-en="🎬 Watch video">🎬 Xem video</a>`
-                        : `<span style="width:90px"></span>`;
+            : `<span style="width:90px"></span>`;
 
-                    // Related products for this date
-                    const relList = relatedMap[r.date] || [];
-                    const relHtml = relList.length ? `
+        // Related products for this date
+        const relList = relatedMap[r.date] || [];
+        const relHtml = relList.length ? `
                         <div class="review-related">
                             <span class="related-label" data-vi="🔗 Dùng cùng:" data-en="🔗 Used with:">🔗 Dùng cùng:</span>
                             ${relList.map(rel =>
-                                `<a class="related-link" href="product-detail.html?no=${rel.no}"
+            `<a class="related-link" href="product-detail.html?no=${rel.no}"
                                     data-translatable>${rel.name}</a>`
-                            ).join('')}
+        ).join('')}
                         </div>` : '';
 
-                    return `
+        return `
                     <div class="review-row">
                         <div>
                             ${r.date ? `<div class="review-date">📅 ${r.date}</div>` : ''}
@@ -168,7 +168,7 @@ function renderDetail(p) {
                         </div>
                         ${vidHtml}
                     </div>`;
-                }).join('')}
+    }).join('')}
             </div>
         </div>` : '';
 
@@ -248,14 +248,14 @@ function renderDetail(p) {
 // ================================================================
 async function submitFeedback(productName) {
     const nicknameEl = document.getElementById('fbNickname');
-    const requestEl  = document.getElementById('fbRequest');
-    const btn        = document.getElementById('fbSubmitBtn');
+    const requestEl = document.getElementById('fbRequest');
+    const btn = document.getElementById('fbSubmitBtn');
 
     const nickname = nicknameEl.value.trim();
-    const request  = requestEl.value.trim();
+    const request = requestEl.value.trim();
 
     if (!nickname) { nicknameEl.focus(); showToast('Vui lòng nhập nickname nhé! 🥺', 'error'); return; }
-    if (!request)  { requestEl.focus();  showToast('Bạn chưa nhập yêu cầu nè! 🥺', 'error'); return; }
+    if (!request) { requestEl.focus(); showToast('Bạn chưa nhập yêu cầu nè! 🥺', 'error'); return; }
 
     btn.disabled = true;
     btn.textContent = '⏳ Đang gửi...';
@@ -270,7 +270,7 @@ async function submitFeedback(productName) {
         await fetch(url.toString(), { mode: 'no-cors' });
         showToast('✅ Gửi thành công! Nhún sẽ cân nhắc nhé 💚');
         nicknameEl.value = '';
-        requestEl.value  = '';
+        requestEl.value = '';
     } catch (err) {
         showToast('❌ Gửi thất bại. Thử lại sau nhé!', 'error');
     } finally {
@@ -282,16 +282,16 @@ async function submitFeedback(productName) {
 
 // Also used from yeu-cau-review.html
 async function submitReviewRequest() {
-    const productEl  = document.getElementById('rrProduct');
+    const productEl = document.getElementById('rrProduct');
     const nicknameEl = document.getElementById('rrNickname');
-    const noteEl     = document.getElementById('rrNote');
-    const btn        = document.getElementById('rrSubmitBtn');
+    const noteEl = document.getElementById('rrNote');
+    const btn = document.getElementById('rrSubmitBtn');
 
-    const product  = productEl ? productEl.value.trim() : '';
+    const product = productEl ? productEl.value.trim() : '';
     const nickname = nicknameEl ? nicknameEl.value.trim() : '';
-    const note     = noteEl ? noteEl.value.trim() : '';
+    const note = noteEl ? noteEl.value.trim() : '';
 
-    if (!product)  { productEl.focus();  showToast('Bạn chưa nhập sản phẩm muốn review nè! 🥺', 'error'); return; }
+    if (!product) { productEl.focus(); showToast('Bạn chưa nhập sản phẩm muốn review nè! 🥺', 'error'); return; }
     if (!nickname) { nicknameEl.focus(); showToast('Vui lòng nhập nickname nhé! 🥺', 'error'); return; }
 
     btn.disabled = true;
@@ -306,7 +306,7 @@ async function submitReviewRequest() {
 
         await fetch(url.toString(), { mode: 'no-cors' });
         showToast('✅ Gửi thành công! Nhún sẽ cân nhắc nhé 💚');
-        productEl.value  = '';
+        productEl.value = '';
         nicknameEl.value = '';
         if (noteEl) noteEl.value = '';
     } catch (err) {
@@ -330,7 +330,7 @@ function switchImg(src, thumb) {
 // LOAD PRODUCT
 // ================================================================
 async function loadDetail() {
-    const no   = getParam('no');
+    const no = getParam('no');
     const main = document.getElementById('detailMain');
 
     // Try sessionStorage first (set by list page on card click)
@@ -350,11 +350,11 @@ async function loadDetail() {
     // Fallback: fetch from gviz API
     const SHEET_ID = '1kZrMreYg5bqZBy9-_8CXu7DjH5u72cOpgtPPxvvaoIA';
     try {
-        const res   = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`);
-        const text  = await res.text();
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`);
+        const text = await res.text();
         const match = text.match(/setResponse\(([\s\S]*)\)/);
         if (!match) throw new Error('Cannot parse gviz response');
-        const json  = JSON.parse(match[1]);
+        const json = JSON.parse(match[1]);
 
         const cols = json.table.cols;
         const rows = json.table.rows;
