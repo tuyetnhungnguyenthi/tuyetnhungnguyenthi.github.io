@@ -1,62 +1,50 @@
 // ================================================================
-// api.js — Danh sách sản phẩm (goc-nho.html)
+// api.js — Góc Nhỏ Của Nhún
+// Dùng Google Sheets gviz JSON API (không cần Apps Script)
+// Sheet phải được share "Anyone with link can view"
 // ================================================================
 
-const GOOGLE_SHEET_API = "https://script.google.com/macros/s/AKfycbyDh9UY4hO56gpCExj2SEyYRzSzLTluHJkvACg2ITOGbZ5UDecYyvhHZuwaPKVCuhfdEw/exec";
+const SHEET_ID = '1kZrMreYg5bqZBy9-_8CXu7DjH5u72cOpgtPPxvvaoIA';
 
-// Lưu tất cả sản phẩm để filter không cần fetch lại
 let allProducts = [];
-let activeCat = 'all';
+let activeCat   = 'all';
 
-// ---- Helpers ----
-
-/** Chuyển Google Drive view link → thumbnail URL */
+// ---- Helpers: parse Google Drive URLs ----
 function driveThumb(url) {
     const m = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-    return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w500` : url;
+    return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w600` : url;
 }
 
-/** Parse chuỗi ảnh từ sheet (mỗi dòng: "1 - https://..." hoặc chỉ URL) */
+// ---- Helpers: parse multi-line cell content ----
 function parseImages(raw) {
     if (!raw) return [];
     return raw.split('\n')
-        .map(line => {
-            const m = line.match(/https?:\/\/[^\s]+/);
-            return m ? driveThumb(m[0]) : null;
-        })
+        .map(line => { const m = line.match(/https?:\/\/[^\s]+/); return m ? driveThumb(m[0]) : null; })
         .filter(Boolean);
 }
 
-/** Parse review entries: "DD/MM/YYYY: nội dung\nDD/MM/YYYY: ..." */
 function parseReviews(raw) {
     if (!raw) return [];
-    const result = [];
-    let current = null;
+    const result = []; let current = null;
     raw.split('\n').forEach(line => {
         line = line.trim();
         const m = line.match(/^(\d{1,2}\/\d{1,2}\/\d{4})\s*:\s*(.*)/);
-        if (m) {
-            if (current) result.push(current);
-            current = { date: m[1], content: m[2] };
-        } else if (current && line) {
-            current.content += ' ' + line;
-        }
+        if (m) { if (current) result.push(current); current = { date: m[1], content: m[2] }; }
+        else if (current && line) current.content += ' ' + line;
     });
     if (current) result.push(current);
     return result;
 }
 
-/** Parse video links: "DD/MM/YYYY:\nhttps://..." */
 function parseVideoLinks(raw) {
     if (!raw) return [];
-    const result = [];
-    let current = null;
+    const result = []; let current = null;
     raw.split('\n').forEach(line => {
         line = line.trim();
-        const dateM = line.match(/^(\d{1,2}\/\d{1,2}\/\d{4})\s*:?\s*(https?:\/\/.*)?/);
-        if (dateM) {
+        const dm = line.match(/^(\d{1,2}\/\d{1,2}\/\d{4})\s*:?\s*(https?:\/\/.*)?/);
+        if (dm) {
             if (current && current.url) result.push(current);
-            current = { date: dateM[1], url: dateM[2] ? dateM[2].trim() : '' };
+            current = { date: dm[1], url: dm[2] ? dm[2].trim() : '' };
         } else if (line.match(/^https?:\/\//) && current) {
             current.url = line;
         }
@@ -65,21 +53,48 @@ function parseVideoLinks(raw) {
     return result;
 }
 
-/** Lấy ngày đầu tiên của review để sort */
-function firstReviewDate(product) {
-    if (product.reviews && product.reviews.length > 0) {
-        const parts = product.reviews[0].date.split('/');
-        if (parts.length === 3) {
-            return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
-        }
-    }
-    return new Date(0);
+// ---- Fetch from Google Sheets gviz JSON API ----
+async function fetchFromSheet() {
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+    const res  = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const text = await res.text();
+
+    // Strip gviz wrapper: /*O_o*/\ngoogle.visualization.Query.setResponse({...});
+    const match = text.match(/setResponse\(([\s\S]*)\)/);
+    if (!match) throw new Error('Cannot parse gviz response');
+    const json = JSON.parse(match[1]);
+
+    const cols = json.table.cols;   // [{label, type}, ...]
+    const rows = json.table.rows;   // [{c: [{v: value}, ...]}, ...]
+
+    // Build column label → index map
+    const colIdx = {};
+    cols.forEach((col, i) => { if (col.label) colIdx[col.label.trim()] = i; });
+
+    const get = (row, label) => {
+        const i = colIdx[label];
+        if (i === undefined || !row.c || !row.c[i] || row.c[i].v === null) return '';
+        return String(row.c[i].v);
+    };
+
+    return rows
+        .map((row, idx) => ({
+            no:         parseInt(get(row, 'No.')) || idx + 1,
+            name:       get(row, 'Tên sản phẩm'),
+            shopeeLink: get(row, 'Link shoppee'),
+            tiktokLink: get(row, 'Link tiktok'),
+            images:     parseImages(get(row, 'Hình ảnh sản phẩm')),
+            reviews:    parseReviews(get(row, 'Nội dung review')),
+            videoLinks: parseVideoLinks(get(row, 'Link video tiktok liên quan')),
+            category:   get(row, 'Danh mục') || 'Khác'
+        }))
+        .filter(p => p.name && p.name.trim()); // bỏ hàng trống
 }
 
-// ---- Render ----
-
+// ---- Render product grid ----
 function renderGrid(products) {
-    const grid = document.getElementById('productGrid');
+    const grid      = document.getElementById('productGrid');
     const noResults = document.getElementById('noResults');
 
     if (!products.length) {
@@ -90,25 +105,28 @@ function renderGrid(products) {
     noResults.classList.add('hidden');
 
     grid.innerHTML = products.map(p => {
-        const imgHtml = p.images && p.images.length > 0
-            ? `<img class="card-img" src="${p.images[0]}" alt="${p.name}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'card-img-placeholder\\'>🌿</div>'">`
+        const imgHtml = p.images && p.images.length
+            ? `<img class="card-img" src="${p.images[0]}" alt="${p.name}" loading="lazy"
+                    onerror="this.parentElement.innerHTML='<div class=\\'card-img-placeholder\\'>🌿</div>'">`
             : `<div class="card-img-placeholder">🌿</div>`;
         return `
-        <div class="product-card" onclick="goDetail(${p.no})">
+        <div class="product-card" onclick="goDetail(${p.no})" tabindex="0"
+             onkeypress="if(event.key==='Enter')goDetail(${p.no})">
             ${imgHtml}
             <div class="card-body">
-                <div class="card-category">${p.category || 'Chưa phân loại'}</div>
+                <div class="card-category">${p.category}</div>
                 <div class="card-name">${p.name}</div>
             </div>
         </div>`;
     }).join('');
 }
 
+// ---- Build sidebar category tree ----
 function buildSidebar(products) {
     const tree = document.getElementById('categoryTree');
-    const cats = {};
+    const cats  = {};
     products.forEach(p => {
-        const c = p.category || 'Chưa phân loại';
+        const c = p.category || 'Khác';
         if (!cats[c]) cats[c] = [];
         cats[c].push(p);
     });
@@ -120,40 +138,42 @@ function buildSidebar(products) {
                 <span class="cat-arrow">▶</span>
             </div>
             <div class="cat-items">
-                ${items.map(p => `
-                    <span class="cat-item" onclick="filterByCatAndProduct('${cat}', ${p.no})">${p.name}</span>
-                `).join('')}
+                ${items.map(p =>
+                    `<span class="cat-item" onclick="filterByCatAndProduct('${cat}',${p.no})">${p.name}</span>`
+                ).join('')}
             </div>
-        </div>
-    `).join('');
+        </div>`).join('');
 }
 
+// ---- Build filter pills ----
 function buildFilterPills(products) {
     const pills = document.getElementById('filterPills');
-    const cats = [...new Set(products.map(p => p.category || 'Chưa phân loại'))];
-    const extra = cats.map(c =>
-        `<button class="pill-btn" data-cat="${c}" onclick="setCatFilter('${c}', this)">${c}</button>`
-    ).join('');
-    // Keep "Tất cả" button, append rest
-    pills.innerHTML = `<button class="pill-btn active" data-cat="all" onclick="setCatFilter('all', this)">Tất cả</button>${extra}`;
+    const cats  = [...new Set(products.map(p => p.category || 'Khác'))];
+    pills.innerHTML = `<button class="pill-btn active" data-cat="all" onclick="setCatFilter('all',this)">Tất cả</button>`
+        + cats.map(c =>
+            `<button class="pill-btn" data-cat="${c}" onclick="setCatFilter('${c}',this)">${c}</button>`
+        ).join('');
 }
 
 // ---- Filter / Sort / Search ----
+function firstReviewDate(p) {
+    if (p.reviews && p.reviews.length) {
+        const [d, m, y] = p.reviews[0].date.split('/');
+        if (y) return new Date(`${y}-${m}-${d}`);
+    }
+    return new Date(0);
+}
 
 function getFiltered() {
-    const search = document.getElementById('searchInput').value.toLowerCase().trim();
+    const search = (document.getElementById('searchInput').value || '').toLowerCase().trim();
     const sort   = document.getElementById('sortSelect').value;
-
-    let list = allProducts.filter(p => {
-        const catMatch = activeCat === 'all' || (p.category || 'Chưa phân loại') === activeCat;
-        const searchMatch = !search || p.name.toLowerCase().includes(search);
-        return catMatch && searchMatch;
-    });
-
+    let list = allProducts.filter(p =>
+        (activeCat === 'all' || p.category === activeCat) &&
+        (!search || p.name.toLowerCase().includes(search))
+    );
     if (sort === 'newest') list.sort((a, b) => firstReviewDate(b) - firstReviewDate(a));
     else if (sort === 'oldest') list.sort((a, b) => firstReviewDate(a) - firstReviewDate(b));
     else if (sort === 'az') list.sort((a, b) => a.name.localeCompare(b.name, 'vi'));
-
     return list;
 }
 
@@ -166,21 +186,17 @@ function setCatFilter(cat, btn) {
     applyFilters();
 }
 
-function toggleCat(header) {
-    header.parentElement.classList.toggle('open');
-}
+function toggleCat(header) { header.parentElement.classList.toggle('open'); }
 
 function filterByCatAndProduct(cat, no) {
     activeCat = cat;
-    document.querySelectorAll('#filterPills .pill-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.cat === cat);
-    });
+    document.querySelectorAll('#filterPills .pill-btn').forEach(b =>
+        b.classList.toggle('active', b.dataset.cat === cat));
     applyFilters();
     goDetail(no);
 }
 
-// ---- Navigation to detail ----
-
+// ---- Navigate to detail page ----
 function goDetail(no) {
     const product = allProducts.find(p => p.no == no);
     if (product) {
@@ -189,32 +205,26 @@ function goDetail(no) {
     }
 }
 
-// ---- Fetch ----
-
+// ---- Main: fetch & render ----
 async function fetchProducts() {
     const grid = document.getElementById('productGrid');
     try {
-        const res  = await fetch(GOOGLE_SHEET_API);
-        const raw  = await res.json();
+        allProducts = await fetchFromSheet();
 
-        // Support both old format {name, imageUrl,...} and new format {name, images,...}
-        allProducts = raw.map((item, idx) => ({
-            no:        item.no   ?? idx + 1,
-            name:      item.name ?? '',
-            category:  item.category ?? 'Chưa phân loại',
-            shopeeLink: item.shopeeLink ?? item.affiliateLink ?? '',
-            tiktokLink: item.tiktokLink ?? '',
-            images:    item.images   ?? (item.imageUrl ? [driveThumb(item.imageUrl)] : []),
-            reviews:   item.reviews  ?? (item.description ? [{ date: '', content: item.description }] : []),
-            videoLinks: item.videoLinks ?? []
-        }));
+        if (!allProducts.length) {
+            grid.innerHTML = `<div class="error-state" style="grid-column:1/-1">
+                <div class="icon">📭</div>
+                <strong>Chưa có sản phẩm nào</strong>
+                <p>Thêm dữ liệu vào Google Sheet là hiện thôi!</p>
+            </div>`;
+            return;
+        }
 
         grid.innerHTML = '';
         buildFilterPills(allProducts);
         buildSidebar(allProducts);
         applyFilters();
 
-        // Wire up event listeners
         document.getElementById('sortSelect').addEventListener('change', applyFilters);
         document.getElementById('searchInput').addEventListener('input', applyFilters);
 
@@ -223,7 +233,8 @@ async function fetchProducts() {
             <div class="error-state" style="grid-column:1/-1">
                 <div class="icon">🛠️</div>
                 <strong>Chưa tải được sản phẩm</strong>
-                <p>Kiểm tra lại Apps Script Deployment hoặc kết nối mạng nhé Nhún!</p>
+                <p>Đảm bảo Google Sheet được share <em>"Anyone with link can view"</em> nhé Nhún!</p>
+                <small style="color:var(--text-light);margin-top:6px;display:block">${err.message}</small>
             </div>`;
         console.error('Fetch error:', err);
     }

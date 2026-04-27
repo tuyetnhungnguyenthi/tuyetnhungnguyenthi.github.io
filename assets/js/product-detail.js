@@ -121,55 +121,38 @@ async function loadDetail() {
         } catch (_) {}
     }
 
-    // Fallback: re-fetch from API
-    const GOOGLE_SHEET_API = "https://script.google.com/macros/s/AKfycbyDh9UY4hO56gpCExj2SEyYRzSzLTluHJkvACg2ITOGbZ5UDecYyvhHZuwaPKVCuhfdEw/exec";
+    // Fallback: re-fetch from gviz API
+    const SHEET_ID = '1kZrMreYg5bqZBy9-_8CXu7DjH5u72cOpgtPPxvvaoIA';
     try {
-        const res  = await fetch(GOOGLE_SHEET_API);
-        const raw  = await res.json();
+        const res  = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`);
+        const text = await res.text();
+        const match = text.match(/setResponse\(([\s\S]*)\)/);
+        if (!match) throw new Error('Cannot parse gviz response');
+        const json = JSON.parse(match[1]);
+        const cols = json.table.cols;
+        const rows = json.table.rows;
+        const colIdx = {};
+        cols.forEach((col, i) => { if (col.label) colIdx[col.label.trim()] = i; });
+        const get = (row, label) => {
+            const i = colIdx[label];
+            if (i === undefined || !row.c || !row.c[i] || row.c[i].v === null) return '';
+            return String(row.c[i].v);
+        };
+        function dThumb(url) { const m = url.match(/\/d\/([a-zA-Z0-9_-]+)/); return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w600` : url; }
+        function pImgs(raw) { if (!raw) return []; return raw.split('\n').map(l => { const m = l.match(/https?:\/\/[^\s]+/); return m ? dThumb(m[0]) : null; }).filter(Boolean); }
+        function pRevs(raw) { if (!raw) return []; const r=[]; let c=null; raw.split('\n').forEach(l => { l=l.trim(); const m=l.match(/^(\d{1,2}\/\d{1,2}\/\d{4})\s*:\s*(.*)/); if(m){if(c)r.push(c);c={date:m[1],content:m[2]};}else if(c&&l)c.content+=' '+l; }); if(c)r.push(c); return r; }
+        function pVids(raw) { if (!raw) return []; const r=[]; let c=null; raw.split('\n').forEach(l => { l=l.trim(); const dm=l.match(/^(\d{1,2}\/\d{1,2}\/\d{4})\s*:?\s*(https?:\/\/.*)?/); if(dm){if(c&&c.url)r.push(c);c={date:dm[1],url:dm[2]?dm[2].trim():''};}else if(l.match(/^https?:\/\//)&&c)c.url=l; }); if(c&&c.url)r.push(c); return r; }
 
-        function driveThumb(url) {
-            const m = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-            return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w500` : url;
-        }
-        function parseImages(raw) {
-            if (!raw) return [];
-            return raw.split('\n').map(line => { const m = line.match(/https?:\/\/[^\s]+/); return m ? driveThumb(m[0]) : null; }).filter(Boolean);
-        }
-        function parseReviews(raw) {
-            if (!raw) return [];
-            const result = []; let current = null;
-            raw.split('\n').forEach(line => {
-                line = line.trim();
-                const m = line.match(/^(\d{1,2}\/\d{1,2}\/\d{4})\s*:\s*(.*)/);
-                if (m) { if (current) result.push(current); current = { date: m[1], content: m[2] }; }
-                else if (current && line) current.content += ' ' + line;
-            });
-            if (current) result.push(current);
-            return result;
-        }
-        function parseVideoLinks(raw) {
-            if (!raw) return [];
-            const result = []; let current = null;
-            raw.split('\n').forEach(line => {
-                line = line.trim();
-                const dm = line.match(/^(\d{1,2}\/\d{1,2}\/\d{4})\s*:?\s*(https?:\/\/.*)?/);
-                if (dm) { if (current && current.url) result.push(current); current = { date: dm[1], url: dm[2]||'' }; }
-                else if (line.match(/^https?:\/\//) && current) current.url = line;
-            });
-            if (current && current.url) result.push(current);
-            return result;
-        }
-
-        const all = raw.map((item, idx) => ({
-            no:         item.no ?? idx + 1,
-            name:       item.name ?? '',
-            category:   item.category ?? '',
-            shopeeLink: item.shopeeLink ?? item.affiliateLink ?? '',
-            tiktokLink: item.tiktokLink ?? '',
-            images:     item.images ?? (item.imageUrl ? [item.imageUrl] : []),
-            reviews:    item.reviews ?? (item.description ? [{ date: '', content: item.description }] : []),
-            videoLinks: item.videoLinks ?? []
-        }));
+        const all = rows.map((row, idx) => ({
+            no: parseInt(get(row,'No.')) || idx+1,
+            name: get(row,'Tên sản phẩm'),
+            shopeeLink: get(row,'Link shoppee'),
+            tiktokLink: get(row,'Link tiktok'),
+            images: pImgs(get(row,'Hình ảnh sản phẩm')),
+            reviews: pRevs(get(row,'Nội dung review')),
+            videoLinks: pVids(get(row,'Link video tiktok liên quan')),
+            category: get(row,'Danh mục') || 'Khác'
+        })).filter(p => p.name && p.name.trim());
 
         const product = all.find(p => String(p.no) === String(no));
         if (product) renderDetail(product);
