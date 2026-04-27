@@ -7,7 +7,7 @@
 const SHEET_ID = '1kZrMreYg5bqZBy9-_8CXu7DjH5u72cOpgtPPxvvaoIA';
 
 let allProducts = [];
-let activeCat   = 'all';
+let activeCat = 'all';
 
 // ---- Helpers: parse Google Drive URLs ----
 function driveThumb(url) {
@@ -56,7 +56,7 @@ function parseVideoLinks(raw) {
 // ---- Fetch from Google Sheets gviz JSON API ----
 async function fetchFromSheet() {
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
-    const res  = await fetch(url);
+    const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const text = await res.text();
 
@@ -80,21 +80,21 @@ async function fetchFromSheet() {
 
     return rows
         .map((row, idx) => ({
-            no:         parseInt(get(row, 'No.')) || idx + 1,
-            name:       get(row, 'Tên sản phẩm'),
+            no: parseInt(get(row, 'No.')) || idx + 1,
+            name: get(row, 'Tên sản phẩm'),
             shopeeLink: get(row, 'Link shoppee'),
             tiktokLink: get(row, 'Link tiktok'),
-            images:     parseImages(get(row, 'Hình ảnh sản phẩm')),
-            reviews:    parseReviews(get(row, 'Nội dung review')),
+            images: parseImages(get(row, 'Hình ảnh sản phẩm')),
+            reviews: parseReviews(get(row, 'Nội dung review')),
             videoLinks: parseVideoLinks(get(row, 'Link video tiktok liên quan')),
-            category:   get(row, 'Danh mục') || 'Khác'
+            category: get(row, 'Danh mục') || 'Khác'
         }))
         .filter(p => p.name && p.name.trim()); // bỏ hàng trống
 }
 
 // ---- Render product grid ----
 function renderGrid(products) {
-    const grid      = document.getElementById('productGrid');
+    const grid = document.getElementById('productGrid');
     const noResults = document.getElementById('noResults');
 
     if (!products.length) {
@@ -107,8 +107,8 @@ function renderGrid(products) {
     grid.innerHTML = products.map(p => {
         const imgHtml = p.images && p.images.length
             ? `<img class="card-img" src="${p.images[0]}" alt="${p.name}" loading="lazy"
-                    onerror="this.parentElement.innerHTML='<div class=\\'card-img-placeholder\\'>🌿</div>'">`
-            : `<div class="card-img-placeholder">🌿</div>`;
+                    onerror="this.parentElement.innerHTML='<div class=\\'card-img-placeholder\\'>🍀</div>'">`
+            : `<div class="card-img-placeholder">🍀</div>`;
         return `
         <div class="product-card" onclick="goDetail(${p.no})" tabindex="0"
              onkeypress="if(event.key==='Enter')goDetail(${p.no})">
@@ -127,7 +127,7 @@ function renderGrid(products) {
 // ---- Build sidebar category tree ----
 function buildSidebar(products) {
     const tree = document.getElementById('categoryTree');
-    const cats  = {};
+    const cats = {};
     products.forEach(p => {
         const c = p.category || 'Khác';
         if (!cats[c]) cats[c] = [];
@@ -142,8 +142,8 @@ function buildSidebar(products) {
             </div>
             <div class="cat-items">
                 ${items.map(p =>
-                    `<span class="cat-item" onclick="filterByCatAndProduct('${cat}',${p.no})" data-translatable>${p.name}</span>`
-                ).join('')}
+        `<span class="cat-item" onclick="filterByCatAndProduct('${cat}',${p.no})" data-translatable>${p.name}</span>`
+    ).join('')}
             </div>
         </div>`).join('');
 }
@@ -151,7 +151,7 @@ function buildSidebar(products) {
 // ---- Build filter pills ----
 function buildFilterPills(products) {
     const pills = document.getElementById('filterPills');
-    const cats  = [...new Set(products.map(p => p.category || 'Khác'))];
+    const cats = [...new Set(products.map(p => p.category || 'Khác'))];
     pills.innerHTML = `<button class="pill-btn active" data-cat="all" onclick="setCatFilter('all',this)" data-vi="Tất cả" data-en="All">Tất cả</button>`
         + cats.map(c =>
             `<button class="pill-btn" data-cat="${c}" onclick="setCatFilter('${c}',this)" data-translatable>${c}</button>`
@@ -169,7 +169,7 @@ function firstReviewDate(p) {
 
 function getFiltered() {
     const search = (document.getElementById('searchInput').value || '').toLowerCase().trim();
-    const sort   = document.getElementById('sortSelect').value;
+    const sort = document.getElementById('sortSelect').value;
     let list = allProducts.filter(p =>
         (activeCat === 'all' || p.category === activeCat) &&
         (!search || p.name.toLowerCase().includes(search))

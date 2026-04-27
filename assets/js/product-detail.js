@@ -18,14 +18,14 @@ function renderDetail(p) {
         <div class="detail-gallery">
             <div class="gallery-main">
                 ${mainImgSrc
-                    ? `<img id="mainImg" src="${mainImgSrc}" alt="${p.name}">`
-                    : `<div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:4rem">🌿</div>`}
+            ? `<img id="mainImg" src="${mainImgSrc}" alt="${p.name}">`
+            : `<div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:4rem">🍀</div>`}
             </div>
             ${imgs.length > 1 ? `
             <div class="gallery-thumbs">
                 ${imgs.map((src, i) => `
-                    <img class="gallery-thumb ${i===0?'active':''}"
-                         src="${src}" alt="ảnh ${i+1}"
+                    <img class="gallery-thumb ${i === 0 ? 'active' : ''}"
+                         src="${src}" alt="ảnh ${i + 1}"
                          onclick="switchImg('${src}', this)">
                 `).join('')}
             </div>` : ''}
@@ -41,12 +41,12 @@ function renderDetail(p) {
             <div class="reviews-title" data-vi="📝 Review sản phẩm" data-en="📝 Product Reviews">📝 Review sản phẩm</div>
             <div class="review-table">
                 ${reviews.map(r => {
-                    const vid = videoMap[r.date] || '';
-                    const vidHtml = vid
-                        ? `<a class="review-video" href="${vid}" target="_blank" rel="noopener"
+        const vid = videoMap[r.date] || '';
+        const vidHtml = vid
+            ? `<a class="review-video" href="${vid}" target="_blank" rel="noopener"
                               data-vi="🎬 Xem video" data-en="🎬 Watch video">🎬 Xem video</a>`
-                        : `<span style="width:90px"></span>`;
-                    return `
+            : `<span style="width:90px"></span>`;
+        return `
                     <div class="review-row">
                         <div>
                             ${r.date ? `<div class="review-date">📅 ${r.date}</div>` : ''}
@@ -54,7 +54,7 @@ function renderDetail(p) {
                         </div>
                         ${vidHtml}
                     </div>`;
-                }).join('')}
+    }).join('')}
             </div>
         </div>` : '';
 
@@ -126,13 +126,13 @@ async function loadDetail() {
                 renderDetail(p);
                 return;
             }
-        } catch (_) {}
+        } catch (_) { }
     }
 
     // Fallback: re-fetch from gviz API
     const SHEET_ID = '1kZrMreYg5bqZBy9-_8CXu7DjH5u72cOpgtPPxvvaoIA';
     try {
-        const res  = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`);
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`);
         const text = await res.text();
         const match = text.match(/setResponse\(([\s\S]*)\)/);
         if (!match) throw new Error('Cannot parse gviz response');
@@ -148,18 +148,18 @@ async function loadDetail() {
         };
         function dThumb(url) { const m = url.match(/\/d\/([a-zA-Z0-9_-]+)/); return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w600` : url; }
         function pImgs(raw) { if (!raw) return []; return raw.split('\n').map(l => { const m = l.match(/https?:\/\/[^\s]+/); return m ? dThumb(m[0]) : null; }).filter(Boolean); }
-        function pRevs(raw) { if (!raw) return []; const r=[]; let c=null; raw.split('\n').forEach(l => { l=l.trim(); const m=l.match(/^(\d{1,2}\/\d{1,2}\/\d{4})\s*:\s*(.*)/); if(m){if(c)r.push(c);c={date:m[1],content:m[2]};}else if(c&&l)c.content+=' '+l; }); if(c)r.push(c); return r; }
-        function pVids(raw) { if (!raw) return []; const r=[]; let c=null; raw.split('\n').forEach(l => { l=l.trim(); const dm=l.match(/^(\d{1,2}\/\d{1,2}\/\d{4})\s*:?\s*(https?:\/\/.*)?/); if(dm){if(c&&c.url)r.push(c);c={date:dm[1],url:dm[2]?dm[2].trim():''};}else if(l.match(/^https?:\/\//)&&c)c.url=l; }); if(c&&c.url)r.push(c); return r; }
+        function pRevs(raw) { if (!raw) return []; const r = []; let c = null; raw.split('\n').forEach(l => { l = l.trim(); const m = l.match(/^(\d{1,2}\/\d{1,2}\/\d{4})\s*:\s*(.*)/); if (m) { if (c) r.push(c); c = { date: m[1], content: m[2] }; } else if (c && l) c.content += ' ' + l; }); if (c) r.push(c); return r; }
+        function pVids(raw) { if (!raw) return []; const r = []; let c = null; raw.split('\n').forEach(l => { l = l.trim(); const dm = l.match(/^(\d{1,2}\/\d{1,2}\/\d{4})\s*:?\s*(https?:\/\/.*)?/); if (dm) { if (c && c.url) r.push(c); c = { date: dm[1], url: dm[2] ? dm[2].trim() : '' }; } else if (l.match(/^https?:\/\//) && c) c.url = l; }); if (c && c.url) r.push(c); return r; }
 
         const all = rows.map((row, idx) => ({
-            no: parseInt(get(row,'No.')) || idx+1,
-            name: get(row,'Tên sản phẩm'),
-            shopeeLink: get(row,'Link shoppee'),
-            tiktokLink: get(row,'Link tiktok'),
-            images: pImgs(get(row,'Hình ảnh sản phẩm')),
-            reviews: pRevs(get(row,'Nội dung review')),
-            videoLinks: pVids(get(row,'Link video tiktok liên quan')),
-            category: get(row,'Danh mục') || 'Khác'
+            no: parseInt(get(row, 'No.')) || idx + 1,
+            name: get(row, 'Tên sản phẩm'),
+            shopeeLink: get(row, 'Link shoppee'),
+            tiktokLink: get(row, 'Link tiktok'),
+            images: pImgs(get(row, 'Hình ảnh sản phẩm')),
+            reviews: pRevs(get(row, 'Nội dung review')),
+            videoLinks: pVids(get(row, 'Link video tiktok liên quan')),
+            category: get(row, 'Danh mục') || 'Khác'
         })).filter(p => p.name && p.name.trim());
 
         const product = all.find(p => String(p.no) === String(no));
