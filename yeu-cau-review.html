@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,21 +9,21 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/goc-nho.css">
 </head>
+
 <body class="review-request-page">
     <nav class="navbar">
         <a href="ve-nhun.html" data-vi="Về Nhún" data-en="About Me">Về Nhún</a>
         <a href="goc-nho.html" data-vi="Góc Nhỏ Của Nhún" data-en="Nhún's Corner">Góc Nhỏ Của Nhún</a>
-        <a href="yeu-cau-review.html" class="active"
-           data-vi="Yêu cầu review" data-en="Request Review">Yêu cầu review</a>
+        <a href="yeu-cau-review.html" class="active" data-vi="Yêu cầu review" data-en="Request Review">Yêu cầu
+            review</a>
         <a href="#" onclick="showCvAlert(); return false;" data-vi="My CV" data-en="My CV">My CV</a>
         <button class="lang-btn" id="langToggle" onclick="toggleLang()">🌐 EN</button>
     </nav>
 
     <header class="shop-header">
         <h1 data-vi="✨ Yêu cầu review" data-en="✨ Request a Review">✨ Yêu cầu review</h1>
-        <p data-vi="Bạn muốn Nhún chan review thêm gì không?"
-           data-en="Is there something you'd like Nhún to review?">
-           Bạn muốn Nhún chan review thêm gì không?
+        <p data-vi="Bạn muốn Nhún chan review thêm gì không?" data-en="Is there something you'd like Nhún to review?">
+            Bạn muốn Nhún chan review thêm gì không?
         </p>
     </header>
 
@@ -37,7 +38,8 @@
                 <ul>
                     <li data-html-vi="✅ <strong>Nhanh hơn</strong>: Yêu cầu chung chung như &ldquo;Review tinh dầu Nhún đang dùng&rdquo; — vì Nhún có sẵn sản phẩm, dễ làm ngay! 🌿"
                         data-html-en="✅ <strong>Faster</strong>: General requests like &ldquo;Review the essential oil you're using&rdquo; — because Nhún already has it on hand! 🌿">
-                        ✅ <strong>Nhanh hơn</strong>: Yêu cầu chung chung như &ldquo;Review tinh dầu Nhún đang dùng&rdquo;
+                        ✅ <strong>Nhanh hơn</strong>: Yêu cầu chung chung như &ldquo;Review tinh dầu Nhún đang
+                        dùng&rdquo;
                         — vì Nhún có sẵn sản phẩm, dễ làm ngay! 🌿
                     </li>
                     <li data-html-vi="⏳ <strong>Chậm hơn</strong>: Yêu cầu brand cụ thể như &ldquo;Review tinh dầu hãng XYZ&rdquo; — Nhún phải mua thêm, mà Nhún hơi nghèo 🥺 Nếu có điều kiện hoặc hữu duyên thì Nhún sẽ thử và báo lại nha!"
@@ -52,42 +54,35 @@
             <!-- Form -->
             <form class="rr-form" onsubmit="submitReviewRequest(); return false;">
                 <div>
-                    <label class="rr-label" for="rrProduct"
-                           data-vi="Sản phẩm / loại sản phẩm muốn review *"
-                           data-en="Product / product type to review *">
+                    <label class="rr-label" for="rrProduct" data-vi="Sản phẩm / loại sản phẩm muốn review *"
+                        data-en="Product / product type to review *">
                         Sản phẩm / loại sản phẩm muốn review *
                     </label>
-                    <input type="text" id="rrProduct" class="rr-input"
-                           data-ph-vi="VD: Tinh dầu Nhún đang dùng, Yến mạch cán mỏng..."
-                           data-ph-en="E.g. Essential oil you're using, Rolled oats..."
-                           placeholder="VD: Tinh dầu Nhún đang dùng, Yến mạch cán mỏng..."
-                           maxlength="200" required>
+                    <input type="text" id="rrProduct" class="rr-input" data-ph-vi="VD: Tinh dầu Nhún đang dùng,.."
+                        data-ph-en="E.g. Essential oil you're using,..." placeholder="VD: Tinh dầu Nhún đang dùng,..."
+                        maxlength="200" required>
                 </div>
                 <div>
-                    <label class="rr-label" for="rrNickname"
-                           data-vi="Nickname của bạn *" data-en="Your nickname *">
+                    <label class="rr-label" for="rrNickname" data-vi="Nickname của bạn *" data-en="Your nickname *">
                         Nickname của bạn *
                     </label>
-                    <input type="text" id="rrNickname" class="rr-input"
-                           data-ph-vi="Tên bạn muốn được gọi..."
-                           data-ph-en="What should Nhún call you..."
-                           placeholder="Tên bạn muốn được gọi..."
-                           maxlength="50" required>
+                    <input type="text" id="rrNickname" class="rr-input" data-ph-vi="Tên bạn muốn được gọi..."
+                        data-ph-en="What should Nhún call you..." placeholder="Tên bạn muốn được gọi..." maxlength="50"
+                        required>
                 </div>
                 <div>
-                    <label class="rr-label" for="rrNote"
-                           data-vi="Ghi chú thêm (không bắt buộc)"
-                           data-en="Additional notes (optional)">
+                    <label class="rr-label" for="rrNote" data-vi="Ghi chú thêm (không bắt buộc)"
+                        data-en="Additional notes (optional)">
                         Ghi chú thêm (không bắt buộc)
                     </label>
                     <textarea id="rrNote" class="rr-textarea"
-                              data-ph-vi="Bạn muốn Nhún tập trung review điểm gì? Dùng cho mục đích gì?..."
-                              data-ph-en="Any specific angle you'd like Nhún to focus on?..."
-                              placeholder="Bạn muốn Nhún tập trung review điểm gì? Dùng cho mục đích gì?..."
-                              maxlength="500"></textarea>
+                        data-ph-vi="Bạn muốn Nhún tập trung review điểm gì? Dùng cho mục đích gì?..."
+                        data-ph-en="Any specific angle you'd like Nhún to focus on?..."
+                        placeholder="Bạn muốn Nhún tập trung review điểm gì? Dùng cho mục đích gì?..."
+                        maxlength="500"></textarea>
                 </div>
-                <button type="submit" id="rrSubmitBtn" class="rr-submit-btn"
-                        data-vi="✨ Gửi yêu cầu" data-en="✨ Submit Request">
+                <button type="submit" id="rrSubmitBtn" class="rr-submit-btn" data-vi="✨ Gửi yêu cầu"
+                    data-en="✨ Submit Request">
                     ✨ Gửi yêu cầu
                 </button>
             </form>
@@ -103,4 +98,5 @@
     <script src="assets/js/lang.js"></script>
     <script src="assets/js/product-detail.js"></script>
 </body>
+
 </html>

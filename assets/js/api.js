@@ -181,14 +181,16 @@ function buildSidebar(products) {
         </div>`).join('');
 }
 
-// ---- Build filter pills ----
-function buildFilterPills(products) {
-    const pills = document.getElementById('filterPills');
+// ---- Build category select dropdown ----
+function buildCatSelect(products) {
+    const select = document.getElementById('catSelect');
+    if (!select) return;
     const cats = [...new Set(products.map(p => p.category || 'Khác'))];
-    pills.innerHTML = `<button class="pill-btn active" data-cat="all" onclick="setCatFilter('all',this)" data-vi="Tất cả" data-en="All">Tất cả</button>`
-        + cats.map(c =>
-            `<button class="pill-btn" data-cat="${c}" onclick="setCatFilter('${c}',this)" data-translatable>${c}</button>`
-        ).join('');
+    // Keep 'Tất cả' option, append each category
+    const lang = window.getLang ? window.getLang() : 'vi';
+    select.innerHTML = `<option value="all">${lang === 'en' ? '📁 All categories' : '📁 Tất cả danh mục'}</option>`
+        + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+    select.value = activeCat;
 }
 
 // ---- Filter / Sort / Search ----
@@ -215,10 +217,10 @@ function getFiltered() {
 
 function applyFilters() { renderGrid(getFiltered()); }
 
-function setCatFilter(cat, btn) {
+function setCatFilter(cat) {
     activeCat = cat;
-    document.querySelectorAll('#filterPills .pill-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+    const select = document.getElementById('catSelect');
+    if (select) select.value = cat;
     applyFilters();
 }
 
@@ -226,8 +228,8 @@ function toggleCat(header) { header.parentElement.classList.toggle('open'); }
 
 function filterByCatAndProduct(cat, no) {
     activeCat = cat;
-    document.querySelectorAll('#filterPills .pill-btn').forEach(b =>
-        b.classList.toggle('active', b.dataset.cat === cat));
+    const select = document.getElementById('catSelect');
+    if (select) select.value = cat;
     applyFilters();
     goDetail(no);
 }
@@ -257,7 +259,7 @@ async function fetchProducts() {
         }
 
         grid.innerHTML = '';
-        buildFilterPills(allProducts);
+        buildCatSelect(allProducts);
         buildSidebar(allProducts);
         applyFilters();
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/goc-nho.css">
 </head>
+
 <body>
     <nav class="navbar">
         <a href="ve-nhun.html" data-vi="Về Nhún" data-en="About Me">Về Nhún</a>
@@ -19,7 +21,8 @@
 
     <header class="shop-header">
         <h1 data-vi="🌿 Góc Nhỏ Của Nhún 🌿" data-en="🌿 Nhún's Corner 🌿">🌿 Góc Nhỏ Của Nhún 🌿</h1>
-        <p data-vi="Review chân thực · Link chuẩn chỉnh" data-en="Honest reviews · Legit affiliate links">Review chân thực · Link chuẩn chỉnh</p>
+        <p data-vi="Người chơi hệ bắt bug 🐞" data-en="🐞 Bug-catching players">Người chơi hệ bắt bug 🐞
+        </p>
     </header>
 
     <!-- Toolbar: Sort / Filter / Search -->
@@ -31,15 +34,13 @@
                 <option value="az">A → Z</option>
             </select>
 
-            <div class="filter-pills" id="filterPills">
-                <button class="pill-btn active" data-cat="all" onclick="setCatFilter('all', this)"
-                        data-vi="Tất cả" data-en="All">Tất cả</button>
-            </div>
+            <select id="catSelect" class="sort-select" onchange="setCatFilter(this.value)">
+                <option value="all" data-vi="📂 Tất cả danh mục" data-en="📂 All categories">📂 Tất cả danh mục</option>
+            </select>
 
             <div class="search-wrap">
-                <input type="text" id="searchInput" class="search-input"
-                       data-ph-vi="🔍 Tìm sản phẩm..." data-ph-en="🔍 Search products..."
-                       placeholder="🔍 Tìm sản phẩm...">
+                <input type="text" id="searchInput" class="search-input" data-ph-vi="🔍 Tìm sản phẩm..."
+                    data-ph-en="🔍 Search products..." placeholder="🔍 Tìm sản phẩm...">
             </div>
         </div>
     </div>
@@ -49,27 +50,30 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-title" data-vi="📂 Danh mục" data-en="📂 Categories">📂 Danh mục</div>
             <div id="categoryTree">
-                <p style="font-size:0.82rem;color:var(--text-light);padding:8px"
-                   data-vi="Đang tải..." data-en="Loading...">Đang tải...</p>
+                <p style="font-size:0.82rem;color:var(--text-light);padding:8px" data-vi="Đang tải..."
+                    data-en="Loading...">Đang tải...</p>
             </div>
         </aside>
 
         <main class="product-area">
             <div class="product-grid" id="productGrid">
-                <p class="loading" data-vi="✨ Đang tải sản phẩm..." data-en="✨ Loading products...">✨ Đang tải sản phẩm...</p>
+                <p class="loading" data-vi="✨ Đang tải sản phẩm..." data-en="✨ Loading products...">✨ Đang tải sản
+                    phẩm...</p>
             </div>
-            <p class="no-results hidden" id="noResults"
-               data-vi="😅 Không tìm thấy sản phẩm phù hợp" data-en="😅 No matching products found">
+            <p class="no-results hidden" id="noResults" data-vi="😅 Không tìm thấy sản phẩm phù hợp"
+                data-en="😅 No matching products found">
                 😅 Không tìm thấy sản phẩm phù hợp
             </p>
         </main>
     </div>
 
     <footer>
-        <p data-vi="Made with 💚 by Nhún · © 2026" data-en="Made with 💚 by Nhún · © 2026">Made with 💚 by Nhún · © 2026</p>
+        <p data-vi="Made with 💚 by Nhún · © 2026" data-en="Made with 💚 by Nhún · © 2026">Made with 💚 by Nhún · © 2026
+        </p>
     </footer>
 
     <script src="assets/js/lang.js"></script>
     <script src="assets/js/api.js"></script>
 </body>
+
 </html>
