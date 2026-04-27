@@ -114,11 +114,14 @@ function renderGrid(products) {
              onkeypress="if(event.key==='Enter')goDetail(${p.no})">
             ${imgHtml}
             <div class="card-body">
-                <div class="card-category">${p.category}</div>
-                <div class="card-name">${p.name}</div>
+                <div class="card-category" data-translatable>${p.category}</div>
+                <div class="card-name" data-translatable>${p.name}</div>
             </div>
         </div>`;
     }).join('');
+
+    // Re-apply current language to newly rendered content
+    if (window.applyCurrentLang) window.applyCurrentLang();
 }
 
 // ---- Build sidebar category tree ----

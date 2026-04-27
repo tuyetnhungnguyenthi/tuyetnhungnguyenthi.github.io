@@ -38,18 +38,19 @@ function renderDetail(p) {
     const reviews = p.reviews || [];
     const reviewsHtml = reviews.length ? `
         <div>
-            <div class="reviews-title">📝 Review sản phẩm</div>
+            <div class="reviews-title" data-vi="📝 Review sản phẩm" data-en="📝 Product Reviews">📝 Review sản phẩm</div>
             <div class="review-table">
                 ${reviews.map(r => {
                     const vid = videoMap[r.date] || '';
                     const vidHtml = vid
-                        ? `<a class="review-video" href="${vid}" target="_blank" rel="noopener">🎬 Xem video</a>`
+                        ? `<a class="review-video" href="${vid}" target="_blank" rel="noopener"
+                              data-vi="🎬 Xem video" data-en="🎬 Watch video">🎬 Xem video</a>`
                         : `<span style="width:90px"></span>`;
                     return `
                     <div class="review-row">
                         <div>
                             ${r.date ? `<div class="review-date">📅 ${r.date}</div>` : ''}
-                            <div class="review-content">${r.content}</div>
+                            <div class="review-content" data-translatable>${r.content}</div>
                         </div>
                         ${vidHtml}
                     </div>`;
@@ -61,24 +62,27 @@ function renderDetail(p) {
     const unmatchedVideos = (p.videoLinks || []).filter(v => !videoMap[v.date] || !reviews.find(r => r.date === v.date));
 
     main.innerHTML = `
-        <a href="goc-nho.html" class="detail-back">← Quay lại danh sách</a>
+        <a href="goc-nho.html" class="detail-back"
+           data-vi="← Quay lại danh sách" data-en="← Back to list">← Quay lại danh sách</a>
 
         <div class="detail-layout">
             ${galleryHtml}
 
             <div class="detail-info">
-                <h1 class="detail-name">${p.name}</h1>
+                <h1 class="detail-name" data-translatable>${p.name}</h1>
 
                 <div class="detail-links">
                     ${p.shopeeLink ? `
                     <div class="detail-link-row">
-                        <span class="detail-link-label">🛍️ Link Shopee:</span>
-                        <a class="detail-link-btn" href="${p.shopeeLink}" target="_blank" rel="noopener">Xem trên Shopee ↗</a>
+                        <span class="detail-link-label" data-vi="🛍️ Link Shopee:" data-en="🛍️ Shopee Link:">🛍️ Link Shopee:</span>
+                        <a class="detail-link-btn" href="${p.shopeeLink}" target="_blank" rel="noopener"
+                           data-vi="Xem trên Shopee ↗" data-en="View on Shopee ↗">Xem trên Shopee ↗</a>
                     </div>` : ''}
                     ${p.tiktokLink ? `
                     <div class="detail-link-row">
-                        <span class="detail-link-label">🎵 Link TikTok:</span>
-                        <a class="detail-link-btn" href="${p.tiktokLink}" target="_blank" rel="noopener">Xem trên TikTok ↗</a>
+                        <span class="detail-link-label" data-vi="🎵 Link TikTok:" data-en="🎵 TikTok Link:">🎵 Link TikTok:</span>
+                        <a class="detail-link-btn" href="${p.tiktokLink}" target="_blank" rel="noopener"
+                           data-vi="Xem trên TikTok ↗" data-en="View on TikTok ↗">Xem trên TikTok ↗</a>
                     </div>` : ''}
                 </div>
 
@@ -86,17 +90,21 @@ function renderDetail(p) {
 
                 ${unmatchedVideos.length ? `
                 <div>
-                    <div class="reviews-title">🎬 Video liên quan</div>
+                    <div class="reviews-title" data-vi="🎬 Video liên quan" data-en="🎬 Related Videos">🎬 Video liên quan</div>
                     <div style="display:flex;flex-direction:column;gap:8px">
                         ${unmatchedVideos.map(v => `
                             <div style="display:flex;align-items:center;gap:10px">
                                 ${v.date ? `<span class="review-date">📅 ${v.date}</span>` : ''}
-                                <a class="review-video" href="${v.url}" target="_blank" rel="noopener">🎬 Xem video</a>
+                                <a class="review-video" href="${v.url}" target="_blank" rel="noopener"
+                                   data-vi="🎬 Xem video" data-en="🎬 Watch video">🎬 Xem video</a>
                             </div>`).join('')}
                     </div>
                 </div>` : ''}
             </div>
         </div>`;
+
+    // Apply current language to newly rendered content
+    if (window.applyCurrentLang) window.applyCurrentLang();
 }
 
 function switchImg(src, thumb) {
