@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Về Nhún | Nhuniverse</title>
+    <meta name="description" content="Trang cá nhân của Nhún — Vô tri lạc quan nhưng được cái cứng đầu">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .about-layout { display: grid; grid-template-columns: 200px 1fr; gap: 32px; align-items: start; }
+        .avatar-col { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        .avatar-photo { width: 180px; height: 180px; border-radius: 50%; object-fit: cover; border: 4px solid var(--border); box-shadow: 0 4px 20px rgba(61,168,90,0.15); background: var(--green-100); overflow: hidden; }
+        .bio-intro { font-family: 'Nunito', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 12px; line-height: 1.5; }
+        .bio-intro .wave { animation: wave 1.4s infinite; display: inline-block; }
+        @keyframes wave { 0%,100%{transform:rotate(0deg)} 25%{transform:rotate(20deg)} 75%{transform:rotate(-10deg)} }
+        .bio-text { font-size: 0.94rem; color: var(--text-muted); line-height: 1.85; margin-bottom: 10px; }
+        .highlight { background: var(--green-100); color: var(--accent2); border-radius: 5px; padding: 1px 6px; font-weight: 600; }
+        .emoji-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+        .emoji-chip { display: inline-flex; align-items: center; gap: 5px; background: var(--bg-card2); border: 1px solid var(--border); border-radius: 99px; padding: 5px 12px; font-size: 0.82rem; color: var(--text-muted); font-weight: 500; transition: border-color 0.2s; }
+        .emoji-chip:hover { border-color: var(--accent-soft); color: var(--accent2); }
+        .fun-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+        .fun-card { background: var(--bg-card2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; text-align: center; transition: transform 0.2s, box-shadow 0.2s; }
+        .fun-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(61,168,90,0.1); }
+        .fun-card .icon { font-size: 1.8rem; display: block; margin-bottom: 6px; }
+        .fun-card .label { font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--text); display: block; }
+        .fun-card .desc { font-size: 0.78rem; color: var(--text-muted); margin-top: 3px; }
+        .tiktok-banner { background: linear-gradient(135deg,var(--green-100),#f0faf2); border: 1.5px solid var(--accent-soft); border-radius: var(--radius); padding: 22px 26px; display: flex; align-items: center; gap: 18px; margin-bottom: 20px; }
+        .tiktok-banner .big-icon { font-size: 3rem; flex-shrink: 0; }
+        .tiktok-banner h3 { font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+        .tiktok-banner p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
+        @media (max-width: 640px) {
+            .about-layout { grid-template-columns: 1fr; }
+            .avatar-col { flex-direction: row; gap: 16px; }
+            .avatar-photo { width: 90px; height: 90px; flex-shrink: 0; }
+            .bio-intro { font-size: 0.95rem; }
+            .tiktok-banner { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="ve-nhun.html" class="active" data-vi="Về Nhún" data-en="About Me">Về Nhún</a>
+        <a href="goc-nho.html" data-vi="Góc Nhỏ Của Nhún" data-en="Nhún's Corner">Góc Nhỏ Của Nhún</a>
+        <a href="#" onclick="showCvAlert(); return false;" data-vi="My CV" data-en="My CV">My CV</a>
+        <button class="lang-btn" id="langToggle" onclick="toggleLang()">🌐 EN</button>
+    </nav>
+
+    <main class="container">
+
+        <!-- HEADER -->
+        <header class="profile-header">
+            <h1 data-vi="Chào mừng đến với Nhuniverse 🌿 Mình là Nhún chan!"
+                data-en="Welcome to Nhuniverse 🌿 I'm Nhún chan!">
+                Chào mừng đến với Nhuniverse 🌿 Mình là Nhún chan!
+            </h1>
+            <p class="subtitle"
+               data-vi="QA Automation Engineer &nbsp;·&nbsp; Affiliate Marketing &nbsp;·&nbsp; 🇻🇳 TP. Hồ Chí Minh"
+               data-en="QA Automation Engineer &nbsp;·&nbsp; Affiliate Marketing &nbsp;·&nbsp; 🇻🇳 Ho Chi Minh City">
+                QA Automation Engineer &nbsp;·&nbsp; Affiliate Marketing &nbsp;·&nbsp; 🇻🇳 TP. Hồ Chí Minh
+            </p>
+        </header>
+
+        <!-- ABOUT ME -->
+        <section class="content-section" id="about">
+            <h2 data-vi="👋 Một chút về bản thân" data-en="👋 A little about me">👋 Một chút về bản thân</h2>
+
+            <div class="about-layout">
+                <div class="avatar-col">
+                    <img class="avatar-photo" src="assets/images/Nhunne.jpg" alt="Nhung">
+                </div>
+
+                <div class="bio-col">
+                    <p class="bio-intro"
+                       data-html-vi="<span class='wave'>👋</span> Heyyy! Mình là <strong>Nhung</strong> — hay còn được gọi với nickname là <strong>Nhún</strong>"
+                       data-html-en="<span class='wave'>👋</span> Heyyy! I'm <strong>Nhung</strong> — also known by my nickname <strong>Nhún</strong>">
+                        <span class="wave">👋</span> Heyyy! Mình là <strong>Nhung</strong> — hay còn được gọi với nickname là <strong>Nhún</strong>
+                    </p>
+                    <p class="bio-text"
+                       data-html-vi="Hiện tại công việc chính thức mình đang làm là <span class='highlight'>QA Automation Test Engineer 🇯🇵</span>. Do tính chất công việc nên mình thường ít tiếp xúc với mọi người mà tập trung vào coding nhiều hơn."
+                       data-html-en="My main job is <span class='highlight'>QA Automation Test Engineer 🇯🇵</span>. Due to the nature of the work, I tend to focus more on coding than interacting with people.">
+                        Hiện tại công việc chính thức mình đang làm là <span class="highlight">QA Automation Test Engineer 🇯🇵</span>. Do tính chất công việc nên mình thường ít tiếp xúc với mọi người mà tập trung vào coding nhiều hơn.
+                    </p>
+                    <p class="bio-text"
+                       data-html-vi="Nhưng mà! Mình là người khá hướng ngoại nên quyết định lập kênh <span class='highlight'>TikTok</span> để chia sẻ những khoảnh khắc đời thường, review, cuộc sống WFH... để thỏa mãn đam mê content 🎬✨"
+                       data-html-en="But hey! I'm quite an extrovert, so I started a <span class='highlight'>TikTok</span> channel to share everyday moments, reviews, WFH life, and more — to satisfy my love for content creation 🎬✨">
+                        Nhưng mà! Mình là người khá hướng ngoại nên quyết định lập kênh <span class="highlight">TikTok</span> để chia sẻ những khoảnh khắc đời thường, review, cuộc sống WFH... để thỏa mãn đam mê content 🎬✨
+                    </p>
+                    <p class="bio-text"
+                       data-vi="Hiện tại mình vẫn đang sống 1 cuộc sống 2 thân phận nên hi vọng mọi người đón nhận mình nha 🥺💚"
+                       data-en="I'm currently living a double life, so I hope you'll accept both sides of me 🥺💚">
+                        Hiện tại mình vẫn đang sống 1 cuộc sống 2 thân phận nên hi vọng mọi người đón nhận mình nha 🥺💚
+                    </p>
+
+                    <div class="emoji-row">
+                        <span class="emoji-chip" data-vi="🤖 Vibe coding" data-en="🤖 Vibe coding">🤖 Vibe coding</span>
+                        <span class="emoji-chip" data-vi="🇯🇵 JLPT N3" data-en="🇯🇵 JLPT N3">🇯🇵 JLPT N3</span>
+                        <span class="emoji-chip" data-vi="🛍️ Affiliate reviewer" data-en="🛍️ Affiliate reviewer">🛍️ Affiliate reviewer</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BANNER -->
+        <div class="tiktok-banner">
+            <span class="big-icon">🎀</span>
+            <div>
+                <h3 data-vi="Fact new" data-en="New fact">Fact new</h3>
+                <p data-html-vi="Thật ra có thể xài những website/app có sẵn nhưng mình muốn dùng chính 🌱 <strong>cần câu cơm</strong> của mình để tạo ra sản phẩm mang đậm dấu răng hehe 😜 Lỡ thấy website lỗi thì cứ hú mình đi fix nha 😅"
+                   data-html-en="I could use existing apps, but I want to use my own 🌱 <strong>coding skills</strong> to build something uniquely mine 😜 If you spot any bugs, just let me know and I'll fix it! 😅">
+                    Thật ra có thể xài những website/app có sẵn nhưng mình muốn dùng chính 🌱 <strong>cần câu cơm</strong> của mình để tạo ra sản phẩm mang đậm dấu răng hehe 😜 Lỡ thấy website lỗi thì cứ hú mình đi fix nha 😅
+                </p>
+            </div>
+        </div>
+
+        <!-- GOALS -->
+        <section class="content-section" id="fun">
+            <h2 data-vi="✨ Mục tiêu bản thân" data-en="✨ Personal Goals">✨ Mục tiêu bản thân</h2>
+            <div class="fun-grid">
+                <div class="fun-card">
+                    <span class="icon">💰</span>
+                    <span class="label" data-vi="Affiliate Marketer" data-en="Affiliate Marketer">Affiliate Marketer</span>
+                    <span class="desc" data-vi="Kiếm được nguồn thu nhập thụ động từ Affiliate" data-en="Earn passive income through Affiliate Marketing">Kiếm được nguồn thu nhập thụ động từ Affiliate</span>
+                </div>
+                <div class="fun-card">
+                    <span class="icon">🇯🇵</span>
+                    <span class="label" data-vi="Tiếng Nhật" data-en="Japanese Language">Tiếng Nhật</span>
+                    <span class="desc" data-vi="Học Nhật nhưng sợ kaiwa — hi vọng 1 ngày bắn tiếng Nhật như rap" data-en="Studying Japanese but terrified of speaking — hoping to rap in Japanese someday">Học Nhật nhưng sợ kaiwa — hi vọng 1 ngày bắn tiếng Nhật như rap</span>
+                </div>
+                <div class="fun-card">
+                    <span class="icon">🤖</span>
+                    <span class="label" data-vi="Automation Test" data-en="Automation Testing">Automation Test</span>
+                    <span class="desc" data-vi="Mới thử sức web & extension — hi vọng thành thạo mobile app" data-en="Currently testing web & extensions — aiming to master mobile app testing">Mới thử sức web & extension — hi vọng thành thạo mobile app</span>
+                </div>
+                <div class="fun-card">
+                    <span class="icon">🎬</span>
+                    <span class="label" data-vi="Blogger" data-en="Blogger">Blogger</span>
+                    <span class="desc" data-vi="Muốn thử viết blog, SEO các kiểu con đà điểu" data-en="Want to try writing blogs, SEO, and all that jazz">Muốn thử viết blog, SEO các kiểu con đà điểu</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p data-vi="Made with 💚 by Nhún · © 2026" data-en="Made with 💚 by Nhún · © 2026">Made with 💚 by Nhún · © 2026</p>
+    </footer>
+
+    <script src="assets/js/lang.js"></script>
+</body>
+</html>

@@ -10,32 +10,35 @@
 </head>
 <body>
     <nav class="navbar">
-        <a href="index.html">Về Mình</a>
-        <a href="goc-nho.html" class="active">Góc Nhỏ Của Nhún</a>
-        <a href="#" onclick="alert('Vui lòng liên hệ gmail nhung14042001@gmail.com'); return false;">My CV</a>
+        <a href="ve-nhun.html" data-vi="Về Nhún" data-en="About Me">Về Nhún</a>
+        <a href="goc-nho.html" class="active" data-vi="Góc Nhỏ Của Nhún" data-en="Nhún's Corner">Góc Nhỏ Của Nhún</a>
+        <a href="#" onclick="showCvAlert(); return false;" data-vi="My CV" data-en="My CV">My CV</a>
+        <button class="lang-btn" id="langToggle" onclick="toggleLang()">🌐 EN</button>
     </nav>
 
     <header class="shop-header">
-        <h1>🎀 Góc Nhỏ Của Nhún 🎀</h1>
-        <p>Review chân thực · Link chuẩn chỉnh</p>
+        <h1 data-vi="🎀 Góc Nhỏ Của Nhún 🎀" data-en="🎀 Nhún's Corner 🎀">🎀 Góc Nhỏ Của Nhún 🎀</h1>
+        <p data-vi="Review chân thực · Link chuẩn chỉnh" data-en="Honest reviews · Legit affiliate links">Review chân thực · Link chuẩn chỉnh</p>
     </header>
 
     <!-- Toolbar: Sort / Filter / Search -->
     <div class="toolbar">
         <div class="toolbar-inner">
             <select class="sort-select" id="sortSelect">
-                <option value="newest">⬇ Mới nhất</option>
-                <option value="oldest">⬆ Cũ nhất</option>
+                <option value="newest" data-vi="⬇ Mới nhất" data-en="⬇ Latest">⬇ Mới nhất</option>
+                <option value="oldest" data-vi="⬆ Cũ nhất" data-en="⬆ Oldest">⬆ Cũ nhất</option>
                 <option value="az">A → Z</option>
             </select>
 
             <div class="filter-pills" id="filterPills">
-                <button class="pill-btn active" data-cat="all">Tất cả</button>
-                <!-- Categories added by JS -->
+                <button class="pill-btn active" data-cat="all" onclick="setCatFilter('all', this)"
+                        data-vi="Tất cả" data-en="All">Tất cả</button>
             </div>
 
             <div class="search-wrap">
-                <input type="text" id="searchInput" class="search-input" placeholder="🔍 Tìm sản phẩm...">
+                <input type="text" id="searchInput" class="search-input"
+                       data-ph-vi="🔍 Tìm sản phẩm..." data-ph-en="🔍 Search products..."
+                       placeholder="🔍 Tìm sản phẩm...">
             </div>
         </div>
     </div>
@@ -43,20 +46,29 @@
     <!-- Content: Sidebar + Grid -->
     <div class="content-layout">
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-title">📂 Danh mục</div>
+            <div class="sidebar-title" data-vi="📂 Danh mục" data-en="📂 Categories">📂 Danh mục</div>
             <div id="categoryTree">
-                <p style="font-size:0.82rem;color:var(--text-light);padding:8px">Đang tải...</p>
+                <p style="font-size:0.82rem;color:var(--text-light);padding:8px"
+                   data-vi="Đang tải..." data-en="Loading...">Đang tải...</p>
             </div>
         </aside>
 
         <main class="product-area">
             <div class="product-grid" id="productGrid">
-                <p class="loading">✨ Đang tải sản phẩm từ Google Sheets...</p>
+                <p class="loading" data-vi="✨ Đang tải sản phẩm..." data-en="✨ Loading products...">✨ Đang tải sản phẩm...</p>
             </div>
-            <p class="no-results hidden" id="noResults">😅 Không tìm thấy sản phẩm phù hợp</p>
+            <p class="no-results hidden" id="noResults"
+               data-vi="😅 Không tìm thấy sản phẩm phù hợp" data-en="😅 No matching products found">
+                😅 Không tìm thấy sản phẩm phù hợp
+            </p>
         </main>
     </div>
 
+    <footer>
+        <p data-vi="Made with 💚 by Nhún · © 2026" data-en="Made with 💚 by Nhún · © 2026">Made with 💚 by Nhún · © 2026</p>
+    </footer>
+
+    <script src="assets/js/lang.js"></script>
     <script src="assets/js/api.js"></script>
 </body>
 </html>

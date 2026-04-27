@@ -9,9 +9,10 @@
 </head>
 <body>
     <nav class="navbar">
-        <a href="index.html">Về Mình</a>
-        <a href="goc-nho.html">Góc Nhỏ Của Nhún</a>
-        <a href="#" onclick="alert('Vui lòng liên hệ gmail nhung14042001@gmail.com'); return false;">My CV</a>
+        <a href="ve-nhun.html" data-vi="Về Nhún" data-en="About Me">Về Nhún</a>
+        <a href="goc-nho.html" data-vi="Góc Nhỏ Của Nhún" data-en="Nhún's Corner">Góc Nhỏ Của Nhún</a>
+        <a href="#" onclick="showCvAlert(); return false;" data-vi="My CV" data-en="My CV">My CV</a>
+        <button class="lang-btn" id="langToggle" onclick="toggleLang()">🌐 EN</button>
     </nav>
 
     <header class="shop-header">
@@ -23,6 +24,7 @@
         <p class="loading">✨ Đang tải sản phẩm...</p>
     </main>
 
+    <script src="assets/js/lang.js"></script>
     <script src="assets/js/product-detail.js"></script>
 </body>
 </html>
