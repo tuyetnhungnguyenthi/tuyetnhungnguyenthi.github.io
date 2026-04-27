@@ -1,11 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
-  <!-- Four leaves -->
-  <ellipse cx="12" cy="7.5" rx="4" ry="5" fill="#3da85a" opacity="0.88" transform="rotate(0 12 12)"/>
-  <ellipse cx="16.5" cy="12" rx="4" ry="5" fill="#3da85a" opacity="0.88" transform="rotate(90 12 12)"/>
-  <ellipse cx="12" cy="16.5" rx="4" ry="5" fill="#3da85a" opacity="0.88" transform="rotate(180 12 12)"/>
-  <ellipse cx="7.5" cy="12" rx="4" ry="5" fill="#3da85a" opacity="0.88" transform="rotate(270 12 12)"/>
-  <!-- Center -->
-  <circle cx="12" cy="12" r="2.2" fill="#2e8f47"/>
-  <!-- Stem -->
-  <path d="M12 14.5 Q13.5 18 15 21.5" stroke="#3da85a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <!--
+    Four-leaf clover — 4 heart-shaped leaves, each rotated 90° around center (12,12)
+    Each leaf: two rounded lobes with a notch at outer tip, tapering to a point at center
+    Path breakdown (leaf pointing UP):
+      M12 12         → start at center
+      C8 11,7 7,9 5  → left lobe exterior (sweeping up-left to left lobe tip at 9,5)
+      C10.5 3.5,12 4.5,12 6.5   → round left lobe top, arrive at center-notch
+      C12 4.5,13.5 3.5,15 5     → from notch to right lobe tip at 15,5
+      C17 7,16 11,12 12  → right lobe exterior back down to center
+      Z
+  -->
+
+  <!-- Leaf 1 — pointing up (top) -->
+  <path d="M12 12 C8 11,7 7,9 5 C10.5 3.5,12 4.5,12 6.5 C12 4.5,13.5 3.5,15 5 C17 7,16 11,12 12Z"
+        fill="#4ab866"/>
+
+  <!-- Leaf 2 — pointing right (rotate 90°) -->
+  <path d="M12 12 C8 11,7 7,9 5 C10.5 3.5,12 4.5,12 6.5 C12 4.5,13.5 3.5,15 5 C17 7,16 11,12 12Z"
+        fill="#3da85a" transform="rotate(90 12 12)"/>
+
+  <!-- Leaf 3 — pointing down (rotate 180°) -->
+  <path d="M12 12 C8 11,7 7,9 5 C10.5 3.5,12 4.5,12 6.5 C12 4.5,13.5 3.5,15 5 C17 7,16 11,12 12Z"
+        fill="#4ab866" transform="rotate(180 12 12)"/>
+
+  <!-- Leaf 4 — pointing left (rotate 270°) -->
+  <path d="M12 12 C8 11,7 7,9 5 C10.5 3.5,12 4.5,12 6.5 C12 4.5,13.5 3.5,15 5 C17 7,16 11,12 12Z"
+        fill="#3da85a" transform="rotate(270 12 12)"/>
+
+  <!-- Center knot -->
+  <circle cx="12" cy="12" r="1.6" fill="#2e8f47"/>
+
+  <!-- Stem (curved, goes bottom-right) -->
+  <path d="M12 13 Q13.5 18 15.5 22" stroke="#2e8f47" stroke-width="1.4" fill="none" stroke-linecap="round"/>
 </svg>
