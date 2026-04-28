@@ -7,6 +7,7 @@
     <title>Về Nhún | Nhuniverse</title>
     <meta name="description" content="Trang cá nhân của Nhún — Vô tri lạc quan nhưng được cái cứng đầu">
     <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/theme.js"></script>
     <style>
         .about-layout {
             display: grid;
@@ -71,7 +72,7 @@
         }
 
         .highlight {
-            background: var(--green-100);
+            background: rgba(16, 185, 129, 0.15);
             color: var(--accent2);
             border-radius: 5px;
             padding: 1px 6px;
@@ -121,7 +122,8 @@
 
         .fun-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(61, 168, 90, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 16px rgba(16, 185, 129, 0.12);
+            border-color: var(--border-light);
         }
 
         .fun-card .icon {
@@ -145,8 +147,8 @@
         }
 
         .tiktok-banner {
-            background: linear-gradient(135deg, var(--green-100), #f0faf2);
-            border: 1.5px solid var(--accent-soft);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(16, 185, 129, 0.04));
+            border: 1px solid var(--border-light);
             border-radius: var(--radius);
             padding: 22px 26px;
             display: flex;
@@ -209,6 +211,7 @@
         <a href="yeu-cau-review.html" data-vi="Yêu cầu review" data-en="Request Review">Yêu cầu review</a>
         <a href="#" onclick="showCvAlert(); return false;" data-vi="My CV" data-en="My CV">My CV</a>
         <button class="lang-btn" id="langToggle" onclick="toggleLang()">🌐 EN</button>
+        <button class="theme-btn" onclick="toggleTheme()" title="Đổi giao diện">☀️</button>
     </nav>
 
     <main class="container">
