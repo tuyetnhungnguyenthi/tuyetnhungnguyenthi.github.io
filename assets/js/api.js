@@ -9,6 +9,10 @@ const SHEET_ID = '1kZrMreYg5bqZBy9-_8CXu7DjH5u72cOpgtPPxvvaoIA';
 let allProducts = [];
 let activeCat = 'all';
 
+// ---- Pagination state ----
+const PAGE_SIZE = 10;
+let currentPage = 1;
+
 // ---- Helpers: parse Google Drive URLs ----
 function driveThumb(url) {
     const m = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
@@ -125,7 +129,7 @@ async function fetchFromSheet() {
         .filter(p => p.name && p.name.trim()); // bỏ hàng trống
 }
 
-// ---- Render product grid ----
+// ---- Render product grid (with pagination) ----
 function renderGrid(products) {
     const grid = document.getElementById('productGrid');
     const noResults = document.getElementById('noResults');
@@ -133,11 +137,20 @@ function renderGrid(products) {
     if (!products.length) {
         grid.innerHTML = '';
         noResults.classList.remove('hidden');
+        renderPagination(0, 0);
         return;
     }
     noResults.classList.add('hidden');
 
-    grid.innerHTML = products.map(p => {
+    const totalPages = Math.ceil(products.length / PAGE_SIZE);
+    // Clamp currentPage in case filter reduced total
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const pageItems = products.slice(start, start + PAGE_SIZE);
+
+    grid.innerHTML = pageItems.map(p => {
         const imgHtml = p.images && p.images.length
             ? `<img class="card-img" src="${p.images[0]}" alt="${p.name}" loading="lazy"
                     onerror="this.parentElement.innerHTML='<div class=\\'card-img-placeholder\\'>🌿</div>'">`
@@ -153,8 +166,70 @@ function renderGrid(products) {
         </div>`;
     }).join('');
 
+    renderPagination(products.length, totalPages);
+
     // Re-apply current language to newly rendered content
     if (window.applyCurrentLang) window.applyCurrentLang();
+}
+
+// ---- Render pagination controls ----
+function renderPagination(totalItems, totalPages) {
+    const container = document.getElementById('paginationBar');
+    if (!container) return;
+
+    if (totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+    }
+
+    const lang = window.getLang ? window.getLang() : 'vi';
+    const prevLabel = lang === 'en' ? '‹ Prev' : '‹ Trước';
+    const nextLabel = lang === 'en' ? 'Next ›' : 'Tiếp ›';
+
+    // Build page number buttons (show max 5 around current)
+    let pageButtons = '';
+    const delta = 2;
+    const left = Math.max(1, currentPage - delta);
+    const right = Math.min(totalPages, currentPage + delta);
+
+    if (left > 1) {
+        pageButtons += `<button class="pg-btn" onclick="goPage(1)">1</button>`;
+        if (left > 2) pageButtons += `<span class="pg-ellipsis">…</span>`;
+    }
+    for (let i = left; i <= right; i++) {
+        pageButtons += `<button class="pg-btn ${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</button>`;
+    }
+    if (right < totalPages) {
+        if (right < totalPages - 1) pageButtons += `<span class="pg-ellipsis">…</span>`;
+        pageButtons += `<button class="pg-btn" onclick="goPage(${totalPages})">${totalPages}</button>`;
+    }
+
+    const start = (currentPage - 1) * PAGE_SIZE + 1;
+    const end = Math.min(currentPage * PAGE_SIZE, totalItems);
+    const infoText = lang === 'en'
+        ? `${start}–${end} of ${totalItems}`
+        : `${start}–${end} / ${totalItems} sản phẩm`;
+
+    container.innerHTML = `
+        <div class="pg-info">${infoText}</div>
+        <div class="pg-controls">
+            <button class="pg-btn pg-nav" onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>${prevLabel}</button>
+            ${pageButtons}
+            <button class="pg-btn pg-nav" onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>${nextLabel}</button>
+        </div>
+    `;
+}
+
+// ---- Go to a specific page ----
+function goPage(page) {
+    const filtered = getFiltered();
+    const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+    if (page < 1 || page > totalPages) return;
+    currentPage = page;
+    renderGrid(filtered);
+    // Scroll grid into view smoothly
+    const grid = document.getElementById('productGrid');
+    if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // ---- Build sidebar category tree ----
@@ -215,7 +290,10 @@ function getFiltered() {
     return list;
 }
 
-function applyFilters() { renderGrid(getFiltered()); }
+function applyFilters() {
+    currentPage = 1; // Reset to page 1 on any filter/sort/search change
+    renderGrid(getFiltered());
+}
 
 function setCatFilter(cat) {
     activeCat = cat;

@@ -651,3 +651,92 @@
 }
 .rr-submit-btn:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(16, 185, 129, 0.4); }
 .rr-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ===================================================
+   PAGINATION BAR
+   =================================================== */
+.pagination-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 28px;
+    padding: 14px 4px 6px;
+    border-top: 1px solid var(--border);
+}
+
+.pg-info {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+}
+
+.pg-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.pg-btn {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    background: var(--bg-card2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 5px 11px;
+    min-width: 34px;
+    height: 34px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.12s;
+    line-height: 1;
+}
+
+.pg-btn:hover:not(:disabled):not(.active) {
+    background: var(--green-100);
+    border-color: var(--accent);
+    color: var(--accent2);
+    transform: translateY(-1px);
+}
+
+.pg-btn.active {
+    background: linear-gradient(135deg, var(--accent), var(--green-700));
+    border-color: var(--accent);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    cursor: default;
+}
+
+.pg-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.pg-btn.pg-nav {
+    padding: 5px 14px;
+    font-size: 0.82rem;
+}
+
+.pg-ellipsis {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    padding: 0 4px;
+    user-select: none;
+}
+
+@media (max-width: 640px) {
+    .pagination-bar {
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+    .pg-btn { min-width: 30px; height: 30px; font-size: 0.78rem; }
+}
